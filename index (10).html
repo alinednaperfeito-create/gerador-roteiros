@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roteiros Prontos | Aline Paula</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0f0c29; font-family: 'Segoe UI', sans-serif; }
+    textarea::placeholder { color: rgba(255,255,255,0.35); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+    ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+
+
+// ─── ESPECIALIDADES ───────────────────────────────────────────────────────────
+const ESPECIALIDADES = [
+  { id: "psicologia", label: "Psicologia", emoji: "🧠", conselho: "CFP" },
+  { id: "odontologia", label: "Odontologia", emoji: "🦷", conselho: "CFO" },
+  { id: "medicina", label: "Medicina", emoji: "🩺", conselho: "CFM" },
+  { id: "estetica", label: "Estética", emoji: "✨", conselho: "ANVISA" },
+  { id: "nutricao", label: "Nutrição", emoji: "🥗", conselho: "CFN" },
+  { id: "advocacia", label: "Advocacia", emoji: "⚖️", conselho: "OAB" },
+  { id: "educacaofisica", label: "Educação Física", emoji: "💪", conselho: "CREF" },
+  { id: "fisioterapia", label: "Fisioterapia", emoji: "🦴", conselho: "CREFITO" },
+  { id: "harmonizacao", label: "Harmonização Facial", emoji: "💉", conselho: "CFM/CRO" },
+  { id: "socialmedia", label: "Social Media", emoji: "📱", conselho: null },
+];
+
+// ─── ROTEIROS ─────────────────────────────────────────────────────────────────
+const ROTEIROS = {
+  psicologia: [
+    { titulo: "Por que sua ansiedade piora à noite?", gancho: "Você deita exausto, mas assim que fecha os olhos seu cérebro decide abrir dezenas de abas ao mesmo tempo.", desenvolvimento: "Durante o dia você está distraído com trabalho e obrigações. À noite, no silêncio do quarto, não há mais distrações para abafar os pensamentos intrusivos. O cortisol, hormônio do estresse, que deveria baixar, continua alto. Uma estratégia validada é o 'diário de preocupações': escreva tudo que está na sua mente uma hora antes de deitar. Isso sinaliza ao cérebro que os problemas estão guardados e não precisam ser resolvidos agora.", cta: "Se você passa por isso frequentemente, salve este vídeo para lembrar dessa técnica hoje à noite." },
+    { titulo: "3 sinais de que você não está apenas cansado, mas em Burnout", gancho: "Pare de achar que você é apenas preguiçoso. Você pode estar entrando em Burnout e ignorando os sinais.", desenvolvimento: "Sinal 1: O cinismo — você começou a tratar colegas ou clientes com frieza e irritação desproporcional. Sinal 2: A exaustão que não passa com o fim de semana. Sinal 3: A sensação de ineficácia — mesmo trabalhando muito, você sente que não produz nada de valor. O Burnout é uma síndrome ocupacional séria reconhecida pela OMS.", cta: "Compartilhe este vídeo com aquele colega de trabalho que precisa ouvir isso hoje." },
+    { titulo: "Por que a psicologia não usa o termo 'pessoa tóxica'", gancho: "A internet adora diagnosticar todo mundo como 'tóxico', mas a psicologia clínica enxerga isso de forma bem diferente.", desenvolvimento: "Pessoas não são radioativas. O que existem são comportamentos disfuncionais e dinâmicas de relacionamento adoecidas. Quando rotulamos alguém como 'tóxico', paramos de analisar o contexto e nossa própria responsabilidade em manter aquela dinâmica.", cta: "Você concorda com essa visão? Deixe sua opinião nos comentários para debatermos de forma saudável." },
+    { titulo: "A técnica psicológica para dizer NÃO sem se sentir culpado", gancho: "Você diz 'sim' querendo dizer 'não', e depois passa dias com raiva de si mesmo por ter aceitado?", desenvolvimento: "Use a técnica do 'Sanduíche de Validação': Primeiro, valide o pedido. Segundo, dê o limite claro. Terceiro, ofereça uma alternativa se possível. Limites claros protegem suas relações, não as destroem.", cta: "Siga meu perfil para aprender mais sobre assertividade e inteligência emocional." },
+    { titulo: "Por que 'pensar positivo' pode estar piorando sua ansiedade", gancho: "Dizer 'veja pelo lado bom' para alguém que está sofrendo é como jogar água em alguém que está se afogando.", desenvolvimento: "A positividade tóxica é a crença de que devemos manter atitude positiva em todas as situações, reprimindo emoções naturais como tristeza, raiva ou frustração. Quando você reprime uma emoção, ela não desaparece — se acumula e frequentemente se manifesta como sintomas físicos ou crises de ansiedade.", cta: "Qual frase de 'positividade tóxica' você não aguenta mais ouvir? Me conte nos comentários." },
+    { titulo: "A verdadeira razão pela qual você procrastina (não é preguiça)", gancho: "Você não procrastina porque é preguiçoso. Você procrastina porque seu cérebro está tentando te proteger.", desenvolvimento: "A psicologia moderna entende a procrastinação como um problema de regulação emocional, não de gestão de tempo. Quando uma tarefa gera ansiedade ou medo de falhar, a amígdala detecta isso como uma ameaça. Para vencer a procrastinação, divida a tarefa em passos ridiculamente pequenos.", cta: "Salve este vídeo para assistir na próxima vez que você estiver adiando algo importante." },
+    { titulo: "O que o 'doomscrolling' está fazendo com seu cérebro", gancho: "Rolar o feed infinitamente antes de dormir está literalmente alterando a química do seu cérebro.", desenvolvimento: "O design das redes sociais é baseado no conceito de 'reforço intermitente' — o mesmo mecanismo das máquinas de cassino. Seu cérebro libera picos de dopamina na expectativa de algo interessante, elevando seu limiar de prazer. O resultado? Atividades normais começam a parecer insuportavelmente entediantes.", cta: "Desafio você a deixar o celular fora do quarto esta noite. Compartilhe com quem vai fazer o desafio com você." },
+    { titulo: "Como saber se é apenas tristeza ou um quadro depressivo?", gancho: "Estar triste não significa estar com depressão, e estar com depressão não significa apenas estar triste.", desenvolvimento: "A tristeza é uma emoção natural e passageira, ligada a um evento específico. A depressão é um transtorno de humor complexo. A principal diferença está na intensidade, duração e impacto funcional. Se a 'tristeza' dura mais de duas semanas, vem com perda de prazer nas atividades e sensação de vazio persistente, isso requer avaliação profissional.", cta: "A informação salva vidas. Compartilhe este vídeo para ajudar na conscientização sobre saúde mental." },
+    { titulo: "Por que você sente que seu parceiro não te ama (mesmo ele amando)", gancho: "Vocês podem estar falando idiomas emocionais completamente diferentes dentro do mesmo relacionamento.", desenvolvimento: "Na terapia de casal, vemos pessoas que se amam mas não se sentem amadas. Isso ocorre porque expressamos afeto da forma que gostaríamos de receber. O segredo não é amar mais — é aprender a 'falar' a linguagem que o outro compreende.", cta: "Siga meu perfil para mais conteúdos sobre inteligência relacional e comunicação assertiva." },
+    { titulo: "O lado obscuro do perfeccionismo que ninguém te conta", gancho: "O perfeccionismo não é uma qualidade que você deve colocar no currículo. É um mecanismo de defesa exaustivo.", desenvolvimento: "Por trás da necessidade de fazer tudo perfeitamente existe um medo profundo de rejeição. O custo é viver em constante estado de alerta, paralisia por análise e uma voz interna extremamente punitiva. A cura para o perfeccionismo não é a mediocridade — é a autocompaixão.", cta: "Se você se identificou, deixe um coração nos comentários. Você não está sozinho nessa cobrança." },
+    { titulo: "Faça isso imediatamente se sentir uma crise de ansiedade chegando", gancho: "Se você sentir o coração acelerar e a respiração faltar, use esta técnica neurológica para 'hackear' seu sistema nervoso.", desenvolvimento: "Durante uma crise, seu corpo entra em modo de 'luta ou fuga'. Para desativar esse alarme, estimule o nervo vago com respiração diafragmática: inspire contando até 4, segure por 2, expire contando até 6. A expiração mais longa envia um sinal biológico ao cérebro de que você está seguro.", cta: "Salve este vídeo agora. Ter ele fácil no celular pode te ajudar muito em um momento de crise." },
+    { titulo: "Por que pessoas competentes se sentem como fraudes?", gancho: "Você já sentiu que alguém vai descobrir a qualquer momento que você não é tão bom assim no que faz?", desenvolvimento: "Isso é a Síndrome do Impostor. Ela afeta desproporcionalmente pessoas altamente capacitadas. Pessoas incompetentes superestimam suas habilidades, enquanto pessoas competentes as subestimam por terem consciência da complexidade do que fazem.", cta: "Conhece alguém incrível que duvida de si mesmo? Envie este vídeo para validar a capacidade dessa pessoa." },
+    { titulo: "Como experiências difíceis da infância moldam suas reações hoje", gancho: "Aquela sua reação exagerada a uma crítica no trabalho pode não ter nada a ver com seu chefe.", desenvolvimento: "O cérebro armazena experiências dolorosas como mecanismos de sobrevivência. Se na infância você aprendeu que errar resultava em perda de afeto, hoje uma simples correção profissional pode acionar o mesmo alarme de perigo. Você não está reagindo ao presente — está sobrevivendo o passado.", cta: "Siga o perfil para entender mais sobre como sua história influencia seu comportamento atual." },
+    { titulo: "4 sinais claros de que você está em dependência emocional", gancho: "Amar alguém é saudável. Precisar dessa pessoa para regular seu próprio humor é dependência emocional.", desenvolvimento: "Sinal 1: Seu humor depende de como a outra pessoa te tratou. Sinal 2: Você abandona seus próprios interesses para estar sempre disponível. Sinal 3: Tolera desrespeito constante por medo do abandono. Sinal 4: Vazio insuportável quando está sozinho. A dependência emocional é sintoma de uma relação não saudável com você mesmo.", cta: "A psicoterapia é o caminho mais seguro para construir autonomia emocional. Link na bio." },
+    { titulo: "O que NUNCA dizer para alguém que perdeu um ente querido", gancho: "Na tentativa de consolar alguém em luto, a maioria das pessoas diz frases que causam ainda mais dor.", desenvolvimento: "Evite frases como 'foi melhor assim', 'o tempo cura tudo' ou 'você precisa ser forte'. O luto não é uma doença — é um processo de adaptação. O melhor apoio é a presença silenciosa e a escuta sem julgamentos.", cta: "Compartilhe este vídeo. Saber acolher a dor do outro é um ato de profunda humanidade." },
+    { titulo: "Autocuidado não é apenas skincare e banho de espuma", gancho: "A indústria do bem-estar te vendeu a ideia de que autocuidado é comprar produtos caros. A psicologia discorda.", desenvolvimento: "O verdadeiro autocuidado psicológico muitas vezes é desconfortável. É ter a coragem de olhar sua situação financeira. É marcar aquela consulta médica que você está adiando. É estabelecer limites com familiares invasivos. Autocuidado real é construir uma vida da qual você não precise fugir constantemente.", cta: "Qual atitude de 'autocuidado real' você precisa tomar essa semana? Comente aqui embaixo." },
+    { titulo: "Como o TDAH se manifesta na vida adulta (além da desatenção)", gancho: "O TDAH em adultos raramente se parece com a criança hiperativa que não para na cadeira.", desenvolvimento: "Na fase adulta, a hiperatividade física frequentemente se transforma em hiperatividade mental: um cérebro que não desliga. Adultos com TDAH enfrentam dificuldade crônica de iniciar tarefas, desregulação emocional intensa e a 'cegueira temporal' — incapacidade de estimar quanto tempo uma tarefa leva.", cta: "Lembre-se: vídeos na internet não substituem avaliação profissional. Busque um especialista se tiver dúvidas." },
+    { titulo: "Por que tentar parecer forte o tempo todo está te isolando", gancho: "A armadura que você construiu para se proteger da dor é a mesma que está impedindo o afeto de entrar.", desenvolvimento: "É preciso muita força emocional para se mostrar imperfeito. Quando você esconde suas falhas e medos, as pessoas podem te admirar, mas não conseguem se conectar com você. A conexão humana genuína só acontece na intersecção das nossas imperfeições.", cta: "Siga meu perfil para reflexões diárias sobre psicologia, relacionamentos e autoconhecimento." },
+    { titulo: "3 sinais de que seu relacionamento é psicologicamente seguro", gancho: "Falamos muito sobre 'red flags', mas você sabe reconhecer as 'green flags' de um relacionamento saudável?", desenvolvimento: "Green flag 1: Vocês podem discordar sem que isso vire um ataque pessoal. Green flag 2: Seu parceiro fica genuinamente feliz com o seu sucesso, sem competição. Green flag 3: Vocês têm interesses e momentos separados, e isso é incentivado, não punido. O amor saudável traz paz, não montanhas-russas emocionais.", cta: "Marque seu parceiro ou parceira nos comentários para celebrar a relação de vocês." },
+    { titulo: "O que seu psicólogo não faz durante a sessão", gancho: "Se você acha que ir à terapia é pagar alguém para te dar conselhos e dizer o que fazer, você está enganado.", desenvolvimento: "O papel do psicólogo não é ser um conselheiro ou juiz moral. Não damos respostas prontas porque isso geraria dependência. A psicoterapia é um processo científico de investigação conjunta para você identificar padrões disfuncionais e desenvolver recursos próprios. O objetivo é que você se torne seu próprio terapeuta.", cta: "Se você está pronto para iniciar esse processo de autoconhecimento, clique no link da minha bio." },
+  ],
+
+  odontologia: [
+    { titulo: "O erro que 90% das pessoas cometem ao escovar os dentes", gancho: "Você provavelmente está escovando seus dentes errado a vida inteira e destruindo seu esmalte sem saber.", desenvolvimento: "A maioria das pessoas escova fazendo força com movimentos horizontais de 'vai e vem'. Isso causa retração gengival e desgaste do esmalte. O movimento correto é suave, circular e de 'varredura', da gengiva para a ponta do dente. Use sempre escova de cerdas extra macias.", cta: "Compartilhe este vídeo com quem precisa aprender a escovar os dentes do jeito certo." },
+    { titulo: "Por que receitas caseiras para clarear os dentes são perigosas", gancho: "Se você usa carvão ativado ou bicarbonato para clarear os dentes, pare agora mesmo.", desenvolvimento: "Essas receitas não clareiam o dente de verdade — elas são altamente abrasivas. O que fazem é 'lixar' a camada superficial, removendo manchas externas mas também removendo o esmalte protetor. O resultado? Dentes extremamente sensíveis e mais amarelos a longo prazo.", cta: "Salve este vídeo para não cair mais nessas armadilhas da internet." },
+    { titulo: "O que acontece quando você não usa fio dental", gancho: "Escovar os dentes sem usar fio dental é como tomar banho e não lavar as axilas.", desenvolvimento: "A escova só alcança três das cinco superfícies do dente. As outras duas, entre os dentes, só são limpas pelo fio dental. É exatamente nesses espaços escondidos que a placa bacteriana se acumula, causando gengivite, mau hálito e cáries que você não vê no espelho.", cta: "Seja sincero nos comentários: quantas vezes por semana você realmente usa fio dental?" },
+    { titulo: "Por que seus dentes doem quando você toma água gelada?", gancho: "Tomar um sorvete ou água gelada virou uma tortura para você? Isso não é normal.", desenvolvimento: "Essa dor aguda é a sensibilidade dentária. Ela acontece quando a dentina, a camada interna do dente cheia de terminações nervosas, fica exposta. Pode ser causada por retração da gengiva, escovação muito forte, bruxismo ou consumo excessivo de alimentos ácidos.", cta: "Se você sofre com sensibilidade, clique no link da bio para agendar uma avaliação." },
+    { titulo: "Você acorda com dor de cabeça e maxilar cansado?", gancho: "Aquela dor de cabeça constante pela manhã pode não ter nada a ver com o seu travesseiro.", desenvolvimento: "Você pode estar sofrendo de bruxismo — o hábito inconsciente de apertar ou ranger os dentes durante o sono, geralmente agravado pelo estresse. Além das dores, o bruxismo causa desgaste severo nos dentes, podendo até fraturá-los. O tratamento envolve uma placa miorrelaxante feita sob medida.", cta: "Conhece alguém que range os dentes dormindo? Envie este vídeo para essa pessoa." },
+    { titulo: "É normal a gengiva sangrar ao usar o fio dental?", gancho: "Se o seu olho começasse a sangrar quando você o lavasse, você iria ao médico. Então por que ignora sua gengiva sangrando?", desenvolvimento: "Gengiva saudável não sangra. Ponto. O sangramento é o primeiro sinal de gengivite. Muitas pessoas param de usar o fio dental quando sangra. Esse é o maior erro! Você deve continuar limpando suavemente e procurar um dentista antes que evolua para periodontite.", cta: "Siga meu perfil para mais dicas de como manter sua saúde bucal em dia." },
+    { titulo: "Por que você precisa ir ao dentista a cada 6 meses?", gancho: "'Eu escovo os dentes todo dia, não preciso ir ao dentista fazer limpeza.' Esse pensamento vai te custar caro.", desenvolvimento: "Por melhor que seja sua escovação, sempre ficam resíduos de placa em áreas difíceis. Com o tempo, essa placa endurece e vira tártaro — como uma pedra colada no dente que nenhuma escova remove. Se não for removido, causa inflamação, perda óssea e perda do dente.", cta: "Faz mais de 6 meses que você não faz uma limpeza? Clique no link da bio e agende seu horário." },
+    { titulo: "Todo mundo precisa extrair o dente do siso?", gancho: "Você realmente precisa arrancar os dentes do siso ou isso é só um mito?", desenvolvimento: "Nem todo mundo precisa extrair os sisos. Se eles nascerem na posição correta, tiverem espaço suficiente e você conseguir higienizá-los bem, podem ficar aí. O problema é que a maioria das pessoas não tem espaço para eles, e sisos mal posicionados podem causar infecções graves e entortar os outros dentes.", cta: "Você ainda tem seus dentes do siso? Me conte nos comentários." },
+    { titulo: "Aparelho invisível funciona mesmo ou é só marketing?", gancho: "Você quer alinhar seus dentes, mas foge do dentista porque não quer usar aquele aparelho metálico cheio de fios?", desenvolvimento: "Os alinhadores transparentes são alta tecnologia ortodôntica. Funcionam através de placas removíveis trocadas periodicamente que aplicam forças precisas para mover os dentes. Você pode tirar para comer, são praticamente invisíveis e não machucam a boca com fios soltos.", cta: "Quer saber se o seu caso pode ser tratado com alinhadores? Agende uma avaliação pelo link da bio." },
+    { titulo: "A verdadeira causa do mau hálito (não é o estômago)", gancho: "Você chupa bala o dia todo porque acha que seu mau hálito vem do estômago? Você está combatendo o inimigo errado.", desenvolvimento: "Mais de 90% dos casos de halitose têm origem na própria boca. As causas mais comuns são: saburra lingual, gengivite, cáries abertas e diminuição da saliva. Balas e enxaguantes só mascaram o problema por alguns minutos.", cta: "Salve este vídeo e comece a usar um raspador de língua hoje mesmo." },
+    { titulo: "Colocar implante dentário dói?", gancho: "Você perdeu um dente, morre de vergonha de sorrir, mas não coloca implante porque tem pavor da cirurgia?", desenvolvimento: "A cirurgia para colocar um implante costuma ser muito mais tranquila e indolor do que a extração de um dente. O osso onde o pino de titânio é instalado tem pouquíssimas terminações nervosas. Com anestesia local adequada, você não sente nada durante o procedimento.", cta: "Tem dúvidas sobre implantes? Deixe sua pergunta nos comentários que eu respondo." },
+    { titulo: "Lentes de contato dental estragam os dentes naturais?", gancho: "Você sonha com aquele sorriso perfeito das celebridades, mas tem medo de desgastar seus dentes naturais?", desenvolvimento: "As lentes de contato dentais são facetas de porcelana ultrafinas. Quando bem indicadas por um profissional qualificado, o desgaste do dente natural é mínimo — às vezes na espessura de um fio de cabelo, ou até zero em alguns casos.", cta: "Siga meu perfil para ver como transformamos sorrisos com responsabilidade e naturalidade." },
+    { titulo: "O que o refrigerante faz com seus dentes (além da cárie)", gancho: "Todo mundo sabe que o açúcar do refrigerante causa cárie. Mas o verdadeiro vilão é outro.", desenvolvimento: "O maior perigo dos refrigerantes, mesmo os zero açúcar, é a acidez extrema. O ácido corrói e dissolve o esmalte do dente — um processo chamado erosão ácida. E o pior erro: escovar os dentes logo após beber refrigerante. Você vai esfregar o ácido no esmalte amolecido.", cta: "Compartilhe este vídeo com aquele amigo que é viciado em refrigerante." },
+    { titulo: "Quando levar o bebê ao dentista pela primeira vez?", gancho: "Você está esperando seu filho ter todos os dentes para levá-lo ao dentista? Você está atrasado.", desenvolvimento: "A primeira consulta ao odontopediatra deve acontecer assim que nasce o primeiro dentinho, ou no máximo até o primeiro ano de vida. Não é para tratar cáries — é prevenção! O dentista orienta sobre escovação correta, dieta e hábitos como chupeta.", cta: "Marque um mãe ou pai de bebê nos comentários para eles saberem disso." },
+    { titulo: "Posso tomar café durante o clareamento dental?", gancho: "Você quer clarear os dentes, mas não quer abrir mão do seu cafezinho sagrado de todo dia? Tenho uma boa notícia.", desenvolvimento: "O mito de que você precisa fazer uma 'dieta branca' e cortar café durante o clareamento já caiu por terra na odontologia moderna. Estudos mostram que os pigmentos dos alimentos não interferem no resultado final se você mantiver uma boa higiene bucal.", cta: "Salve este vídeo para mostrar para quem disse que você não podia tomar café." },
+    { titulo: "Por que você está sempre com a boca seca?", gancho: "Sentir a boca seca o tempo todo não é apenas desconfortável — é um perigo silencioso para seus dentes.", desenvolvimento: "A saliva é o detergente natural da boca. Ela neutraliza ácidos, lava os restos de alimentos e remineraliza o esmalte. Quando você tem pouca saliva, o risco de cáries agressivas e mau hálito multiplica por dez.", cta: "Siga meu perfil para aprender a cuidar da sua saúde bucal de forma integral." },
+    { titulo: "Escova elétrica é realmente melhor que a manual?", gancho: "Vale a pena investir em uma escova de dentes elétrica ou é só jogar dinheiro fora?", desenvolvimento: "Uma escova manual bem usada limpa perfeitamente. Porém, a escova elétrica facilita muito o trabalho — ela faz os movimentos corretos na velocidade ideal por você. Estudos mostram que remove mais placa e reduz mais a gengivite, principalmente porque a maioria das pessoas não tem técnica para escovar manualmente pelo tempo necessário.", cta: "Qual você prefere: elétrica ou manual? Comente aqui embaixo." },
+    { titulo: "O erro que você comete ao usar enxaguante bucal", gancho: "Você usa enxaguante bucal todos os dias achando que está deixando sua boca mais limpa? Cuidado.", desenvolvimento: "O enxaguante não substitui a escovação e o fio dental. Pior: usar enxaguantes com álcool diariamente resseca a boca, diminui a salivação e mata as bactérias 'boas' que protegem sua boca. O enxaguante é um medicamento — deve ser usado com indicação do dentista.", cta: "Compartilhe este vídeo para alertar seus amigos sobre o uso correto do enxaguante." },
+    { titulo: "O que o piercing na língua faz com seus dentes", gancho: "Pensando em colocar um piercing na língua ou no lábio? Veja isso antes de tomar sua decisão.", desenvolvimento: "O atrito constante da bolinha de metal contra os dentes causa microfraturas e trincas no esmalte. Com o tempo, o dente pode literalmente quebrar. Além disso, o piercing na língua frequentemente causa retração severa na gengiva dos dentes inferiores, expondo a raiz.", cta: "Conhece alguém que tem ou quer colocar piercing na boca? Envie este vídeo como alerta." },
+    { titulo: "Como superar o pavor de ir ao dentista", gancho: "Você prefere sentir dor de dente a sentar na cadeira do dentista? Eu entendo o seu medo.", desenvolvimento: "O medo de dentista geralmente vem de traumas na infância ou de procedimentos dolorosos no passado. Mas a odontologia evoluiu muito. Hoje temos anestesias computadorizadas indolores, técnicas minimamente invasivas e sedação com óxido nitroso para reduzir a ansiedade.", cta: "Se você tem medo de dentista, clique no link da bio. Nossa equipe está preparada para te acolher com todo cuidado." },
+  ],
+
+  medicina: [
+    { titulo: "O remédio comum que pode destruir seu fígado", gancho: "Você toma paracetamol toda vez que tem uma dorzinha de cabeça? Você pode estar destruindo seu fígado sem saber.", desenvolvimento: "O paracetamol é excelente e seguro quando usado na dose correta. O problema é que, por ser vendido sem receita, as pessoas acham que é inofensivo e tomam como se fosse bala. A superdosagem de paracetamol é uma das principais causas de falência hepática aguda no mundo.", cta: "Compartilhe este vídeo no grupo da família para alertar quem toma remédio por conta própria." },
+    { titulo: "Como o infarto se manifesta nas mulheres (não é dor no peito)", gancho: "Esqueça a cena de filme onde a pessoa aperta o peito e cai no chão. Nas mulheres, o infarto é muito mais silencioso.", desenvolvimento: "Enquanto os homens costumam sentir a clássica dor esmagadora no peito, as mulheres frequentemente apresentam sintomas atípicos: cansaço extremo e inexplicável dias antes, falta de ar repentina, dor nas costas entre as omoplatas, dor na mandíbula, náuseas e suor frio.", cta: "Envie este vídeo para todas as mulheres importantes da sua vida. Essa informação salva vidas." },
+    { titulo: "Por que ter colesterol alto nem sempre é ruim", gancho: "Você pegou seu exame de sangue, viu o colesterol total alto e já achou que ia infartanar amanhã? Calma.", desenvolvimento: "A medicina moderna já sabe que olhar apenas para o 'colesterol total' é um erro. O colesterol é essencial para a produção de hormônios e vitamina D. O que realmente importa é a proporção entre HDL e LDL, o tamanho das partículas de LDL e os marcadores de inflamação no seu corpo.", cta: "Salve este vídeo para lembrar de perguntar sobre as frações do colesterol na sua próxima consulta." },
+    { titulo: "3 sinais físicos de que você pode estar pré-diabético", gancho: "Seu corpo dá sinais claros de que o açúcar no seu sangue está perigosamente alto, muito antes do exame de glicemia alterar.", desenvolvimento: "Isso se chama resistência à insulina. Sinal 1: Manchas escuras e aveludadas no pescoço ou axilas que parecem sujeira mas não saem no banho. Sinal 2: Verruguinhas ou excesso de pele no pescoço. Sinal 3: Circunferência abdominal aumentada, mesmo que o resto do corpo seja magro.", cta: "Se você notou algum desses sinais, agende uma consulta médica para avaliação." },
+    { titulo: "Por que suco detox não limpa seu organismo", gancho: "Você gastou dinheiro com sucos e chás 'detox' para limpar o organismo depois do fim de semana? Você foi enganado.", desenvolvimento: "Fisiologicamente falando, não existe nenhum alimento, suco ou chá capaz de 'desintoxicar' o seu corpo. Sabe o que faz o detox no seu organismo? Seu fígado e seus rins. Eles trabalham 24 horas por dia, 7 dias por semana, filtrando toxinas.", cta: "Compartilhe este vídeo com quem ainda acredita em dieta detox." },
+    { titulo: "O que acontece no seu corpo quando você dorme mal", gancho: "Dormir menos de 7 horas por noite não te faz mais produtivo — faz você engordar e envelhecer mais rápido.", desenvolvimento: "O sono não é um botão de 'desligar' — é um processo ativo de limpeza e reparo celular. Quando você dorme mal, o cortisol dispara, a grelina (hormônio da fome) aumenta e a leptina (hormônio da saciedade) despenca. O resultado? Você acorda exausto com vontade incontrolável de comer carboidratos e doces.", cta: "Quantas horas você dormiu essa noite? Seja sincero nos comentários." },
+    { titulo: "O maior mito sobre a pressão alta", gancho: "'Minha pressão está normal porque eu não estou sentindo dor na nuca.' Esse é o erro que mais mata no Brasil.", desenvolvimento: "A hipertensão arterial é conhecida na medicina como a 'assassina silenciosa'. Na imensa maioria das vezes, a pressão alta não dá sintoma nenhum. Não dá dor de cabeça, não dá tontura. Quando esses sintomas aparecem, geralmente a pressão já está em níveis de emergência.", cta: "Quando foi a última vez que você mediu sua pressão? Responda nos comentários." },
+    { titulo: "Por que você nunca deve parar o antibiótico antes do fim", gancho: "Você tomou o antibiótico por 3 dias, melhorou da dor de garganta e parou de tomar o remédio? Você acabou de criar um monstro.", desenvolvimento: "Quando você começa um antibiótico, as bactérias mais fracas morrem nos primeiros dias, e é por isso que você se sente melhor. Mas as bactérias mais fortes e resistentes ainda estão vivas. Se você interrompe antes do prazo, essas bactérias super-resistentes sobrevivem e o antibiótico que você usou provavelmente não vai mais funcionar contra elas.", cta: "Salve este vídeo para lembrar na próxima vez que o médico te receitar um antibiótico." },
+    { titulo: "A verdade sobre a Vitamina D que você precisa saber", gancho: "Tomar sol 15 minutos por dia no braço não é suficiente para manter sua Vitamina D em níveis ideais.", desenvolvimento: "A Vitamina D, que na verdade é um hormônio, é crucial para a imunidade, saúde óssea e prevenção de doenças autoimunes. Com o estilo de vida moderno — trabalhando em escritórios fechados e usando protetor solar — a deficiência de Vitamina D virou uma epidemia global.", cta: "Você sabe como estão os seus níveis de Vitamina D? Agende seus exames de rotina." },
+    { titulo: "O remédio mais poderoso do mundo (e é de graça)", gancho: "Se existisse uma pílula que prevenisse câncer, infarto, depressão e Alzheimer, você tomaria? Ela existe, mas você tem que suar para conseguir.", desenvolvimento: "O sedentarismo mata mais que o tabagismo no mundo atual. O corpo humano foi desenhado para o movimento constante. Quando você contrai seus músculos durante o exercício, eles liberam substâncias chamadas miocinas que viajam pela corrente sanguínea reduzindo a inflamação sistêmica e até estimulando a criação de novos neurônios.", cta: "Qual exercício você vai fazer hoje? Comente aqui embaixo e vamos nos motivar." },
+    { titulo: "Por que o intestino é chamado de 'segundo cérebro'", gancho: "Você sabia que a maior parte da serotonina, o hormônio da felicidade, não é produzida no seu cérebro, mas sim na sua barriga?", desenvolvimento: "Seu intestino abriga trilhões de bactérias, fungos e vírus que formam a microbiota intestinal. Esse ecossistema se comunica diretamente com o seu cérebro através do nervo vago. Quando sua microbiota está desequilibrada, essa inflamação viaja para o cérebro, podendo causar ou agravar quadros de ansiedade e depressão.", cta: "Siga meu perfil para aprender mais sobre a conexão entre alimentação e saúde mental." },
+    { titulo: "O maior medo das mulheres sobre a menopausa", gancho: "Você está sofrendo com calores, insônia e ganho de peso na menopausa porque te disseram que reposição hormonal causa câncer?", desenvolvimento: "Esse é um dos maiores desserviços da história da medicina. Um estudo antigo e mal interpretado nos anos 2000 aterrorizou uma geração inteira de mulheres. A ciência atual é clara: quando iniciada na janela de oportunidade e com hormônios bioidênticos, a Terapia de Reposição Hormonal não apenas é segura como protege o coração e previne a osteoporose.", cta: "Compartilhe este vídeo com as mulheres da sua vida que estão passando por essa fase." },
+    { titulo: "A doença silenciosa que atinge 30% dos brasileiros", gancho: "Você fez um ultrassom e o médico disse que você tem 'um pouquinho de gordura no fígado'? Não ignore isso.", desenvolvimento: "A esteatose hepática não é causada só por quem bebe muito. A principal causa hoje é o excesso de carboidratos refinados e frutose. O fígado transforma esse excesso de açúcar em triglicerídeos e os armazena dentro das próprias células hepáticas. Se não for tratada com mudança de estilo de vida, pode evoluir para cirrose e câncer de fígado.", cta: "Salve este vídeo e agende seus exames de rotina para checar a saúde do seu fígado." },
+    { titulo: "4 sinais de que sua tireoide está funcionando mal", gancho: "Você está cansado o tempo todo, ganhando peso sem motivo e seu cabelo está caindo? O problema pode estar no seu pescoço.", desenvolvimento: "A glândula tireoide é o maestro do seu metabolismo. Quando ela trabalha devagar (hipotireoidismo), todo o seu corpo desacelera. Sinal 1: Fadiga extrema mesmo dormindo 8 horas. Sinal 2: Sensação de frio constante em dias quentes. Sinal 3: Intestino preso e pele muito ressecada. Sinal 4: Dificuldade imensa de perder peso.", cta: "Você se identificou com algum desses sintomas? Deixe um comentário." },
+    { titulo: "A verdade assustadora sobre os cigarros eletrônicos", gancho: "Achar que o 'vape' é inofensivo porque tem cheiro de morango ou melancia é a maior ilusão da atualidade.", desenvolvimento: "O cigarro eletrônico não é vapor de água. É um aerossol químico altamente tóxico aquecido a altas temperaturas. Além de conter concentrações altíssimas de nicotina que viciam o cérebro jovem em tempo recorde, o líquido contém metais pesados e substâncias cancerígenas.", cta: "Envie este vídeo urgentemente para qualquer pessoa que você conheça que usa vape." },
+    { titulo: "O truque da indústria alimentícia para te enganar", gancho: "A embalagem diz 'Zero Açúcar', 'Fit' e 'Rico em Fibras', mas se você virar o pacote, a história é outra.", desenvolvimento: "A regra de ouro da saúde preventiva no supermercado: ignore a frente da embalagem e leia a lista de ingredientes. Os ingredientes estão sempre em ordem decrescente de quantidade. Se o primeiro ou segundo ingrediente for açúcar (disfarçado como maltodextrina, xarope de milho, dextrose), fuja.", cta: "Salve este vídeo para lembrar de ler os ingredientes na sua próxima ida ao supermercado." },
+    { titulo: "O erro que você comete ao usar protetor solar", gancho: "Você passa protetor solar de manhã antes de sair de casa e acha que está protegido o dia todo? Errado.", desenvolvimento: "O filtro solar perde sua eficácia química após cerca de 2 a 3 horas de exposição, ou imediatamente após você suar muito ou entrar na água. Além disso, a maioria das pessoas aplica apenas um terço da quantidade recomendada pelos dermatologistas.", cta: "Siga meu perfil para mais dicas de saúde baseadas em evidências científicas." },
+    { titulo: "Beber 2 litros de água por dia é um mito", gancho: "Te ensinaram a vida toda que você precisa beber 2 litros de água por dia. A medicina discorda.", desenvolvimento: "A recomendação de 2 litros é uma média genérica e ultrapassada. A necessidade de hidratação é individual e depende do seu peso, nível de atividade física e clima. A conta médica correta é multiplicar seu peso corporal por 35ml.", cta: "Faça a conta do seu peso vezes 35 e comente aqui quantos litros você precisa beber por dia." },
+    { titulo: "Como reconhecer um AVC em 1 minuto", gancho: "No caso de um AVC, cada minuto que passa significa milhões de neurônios mortos. Você sabe reconhecer os sinais?", desenvolvimento: "Memorize a palavra SAMU. S de Sorriso: peça para a pessoa sorrir — se um lado do rosto entortar, é um sinal. A de Abraço: peça para levantar os dois braços — se um cair, é outro sinal. M de Mensagem: peça para repetir uma frase simples — se a fala sair arrastada, é o terceiro sinal. U de Urgência: ligue imediatamente para o 192.", cta: "Compartilhe este vídeo. Saber o SAMU pode salvar a vida de alguém que você ama." },
+    { titulo: "O que você nunca deve esconder do seu médico", gancho: "Você mente para o seu médico por vergonha de ser julgado? Você está sabotando o seu próprio tratamento.", desenvolvimento: "Muitos pacientes omitem que pararam de tomar o remédio, que usam drogas recreativas ou que estão tomando chás 'naturais' perigosos. O consultório médico é (ou deveria ser) uma zona livre de julgamentos morais. Omitir informações cruciais pode levar a interações medicamentosas fatais ou diagnósticos completamente errados.", cta: "Se você não confia no seu médico atual para contar a verdade, clique no link da bio e agende uma consulta conosco." },
+  ],
+
+  estetica: [
+    { titulo: "O erro que destrói seu skincare noturno", gancho: "Você gasta uma fortuna com cremes caros, mas comete esse erro básico antes de dormir que anula todo o efeito deles.", desenvolvimento: "O erro é não fazer a dupla limpeza (double cleansing). Se você usa protetor solar ou maquiagem durante o dia, apenas lavar o rosto com sabonete não é suficiente. O sabonete não consegue dissolver produtos à base de óleo. Eles ficam acumulados nos poros, causando cravos, espinhas e impedindo que o seu sérum caríssimo penetre na pele.", cta: "Você já faz a dupla limpeza? Me conte nos comentários qual produto você usa." },
+    { titulo: "Por que seus poros não diminuem (e nunca vão diminuir)", gancho: "Pare de comprar produtos que prometem 'fechar os poros'. Poros não têm músculos — eles não abrem e fecham como portas.", desenvolvimento: "O tamanho dos seus poros é determinado geneticamente. O que acontece é que quando estão cheios de sebo, células mortas e sujeira, eles dilatam e ficam mais visíveis. A solução real não é 'fechar' o poro, é mantê-lo limpo com ácido salicílico e estimular o colágeno da pele ao redor.", cta: "Quer saber quais procedimentos ajudam na textura da pele? Clique no link da bio." },
+    { titulo: "O que o limão faz com a sua pele (alerta)", gancho: "Se você viu aquela dica no TikTok de passar limão com bicarbonato no rosto para clarear manchas, não faça isso.", desenvolvimento: "O limão é extremamente ácido (pH em torno de 2), enquanto a nossa pele tem pH levemente ácido (em torno de 5.5). Aplicar limão puro destrói a barreira de proteção natural da sua pele, causando irritação severa e, ironicamente, o efeito rebote: manchas escuras muito piores, especialmente se você pegar sol.", cta: "Compartilhe este vídeo para salvar a pele de alguma amiga." },
+    { titulo: "Qual a idade certa para começar a aplicar Botox?", gancho: "Você acha que só deve aplicar toxina botulínica quando as rugas já estiverem fundas e marcadas? Esse é o maior erro.", desenvolvimento: "A toxina botulínica funciona relaxando a musculatura. Quando você espera a ruga ficar profunda (ruga estática, que aparece mesmo quando você não está sorrindo), a toxina sozinha não resolve mais, porque a pele já 'quebrou' naquele local. O ideal é o uso preventivo, quando as linhas só aparecem durante a expressão facial.", cta: "Você já tem linhas de expressão que te incomodam? Agende uma avaliação pelo link da bio." },
+    { titulo: "Por que seu creme de ácido hialurônico não preenche rugas", gancho: "Você comprou um creme caríssimo de ácido hialurônico achando que ele ia preencher seu bigode chinês? Sinto muito.", desenvolvimento: "O ácido hialurônico dos cremes e séruns tem moléculas grandes demais para penetrar nas camadas profundas da pele. A função dele nos cosméticos é excelente, mas apenas de hidratação superficial. Para preencher sulcos e rugas profundas, o ácido hialurônico precisa ser injetado diretamente na derme.", cta: "Quer entender qual o melhor tratamento para o seu caso? Deixe um comentário." },
+    { titulo: "A verdade dolorosa sobre o Melasma", gancho: "Se alguém te prometer a cura definitiva do melasma, fuja. Essa pessoa está mentindo para você.", desenvolvimento: "O melasma é uma condição crônica — isso significa que ele não tem cura, tem controle. Ele é causado por uma hiperatividade dos melanócitos, estimulada por sol, calor, luz visível e alterações hormonais. Você pode fazer o melhor tratamento do mundo, clarear a pele 100%, mas se for à praia sem proteção, a mancha volta.", cta: "Você sofre com melasma? Salve este vídeo para lembrar que o controle é diário." },
+    { titulo: "O melhor creme antienvelhecimento do mundo custa barato", gancho: "Você pode fazer Botox, preenchimento, usar os cremes mais caros do mercado... se não fizer isso, é dinheiro jogado no lixo.", desenvolvimento: "O sol é responsável por cerca de 80% do envelhecimento da nossa pele (fotoenvelhecimento). Os raios UVA destroem o colágeno e a elastina, causando flacidez e rugas. O melhor e mais barato creme antienvelhecimento que existe é o protetor solar, usado todos os dias, com chuva ou com sol, mesmo dentro de casa.", cta: "Seja sincera: você usa protetor solar todos os dias? Responda nos comentários." },
+    { titulo: "Creme firmador de pele funciona mesmo?", gancho: "Você gasta dinheiro com cremes que prometem acabar com a flacidez da barriga ou das coxas? Pare agora.", desenvolvimento: "A flacidez corporal ocorre nas camadas profundas da pele pela perda de colágeno, ou na musculatura por falta de tônus. Nenhum creme cosmético consegue penetrar tão fundo a ponto de reconstruir fibras de colágeno ou enrijecer músculos. Os cremes melhoram a hidratação e a textura superficial, mas não tratam flacidez real.", cta: "Quer saber quais tecnologias realmente tratam flacidez? Clique no link da bio." },
+    { titulo: "Por que seu creme para olheiras não funciona", gancho: "Você passa cremes caros, dorme 8 horas, mas a olheira continua lá? É porque você está tratando errado.", desenvolvimento: "Existem 3 tipos principais de olheiras. Pigmentar (marrom): causada por excesso de melanina, trata-se com clareadores e peelings. Vascular (arroxeada): causada por vasinhos dilatados, trata-se com laser. Estrutural (sombra): causada pela perda de gordura na região — nenhum creme resolve isso, apenas o preenchimento devolve o volume.", cta: "Qual é o tipo da sua olheira? Agende uma avaliação para descobrirmos juntas." },
+    { titulo: "Por que espremer espinhas em casa é o pior erro", gancho: "Eu sei que é tentador espremer aquele cravo ou espinha no espelho do banheiro, mas veja o que acontece por baixo da sua pele.", desenvolvimento: "Quando você espreme uma espinha, você não tira só o pus. Você empurra parte da inflamação e das bactérias ainda mais fundo na pele, rompendo os tecidos ao redor. O resultado? Uma mancha escura (hiperpigmentação pós-inflamatória) e, muitas vezes, uma cicatriz funda que é dificílima de tratar depois.", cta: "Faz quanto tempo que você não faz uma limpeza de pele profissional? Agende seu horário." },
+    { titulo: "O segredo das famosas para não envelhecer", gancho: "Você já reparou que algumas atrizes parecem não envelhecer, mas também não parecem ter o rosto 'esticado' ou artificial?", desenvolvimento: "O segredo delas não é excesso de preenchimento — são os bioestimuladores de colágeno. A partir dos 25 anos, nós perdemos cerca de 1% de colágeno ao ano. O bioestimulador é injetado na pele e age como um 'adubo', fazendo o seu próprio corpo produzir colágeno novo de alta qualidade. O resultado não é imediato, mas é extremamente natural.", cta: "Quer começar a sua 'poupança de colágeno'? Clique no link da bio." },
+    { titulo: "A verdade sobre a celulite que ninguém te conta", gancho: "Mais de 90% das mulheres têm celulite. Se você tem, parabéns — você é uma mulher normal.", desenvolvimento: "A celulite não é apenas 'gordura acumulada'. É uma alteração complexa que envolve retenção de líquidos, má circulação, inflamação e travas fibrosas que puxam a pele para baixo. É por isso que mulheres magras e atletas também têm celulite. Cremes não resolvem. O tratamento real exige uma abordagem combinada.", cta: "Salve este vídeo para lembrar que celulite é normal e tem tratamento, mas não tem milagre." },
+    { titulo: "Por que furar o rosto faz tão bem para a pele?", gancho: "Parece loucura deixar dezenas de microagulhas no rosto, mas a ciência explica por que isso vai te deixar mais bonita.", desenvolvimento: "O microagulhamento cria microlesões controladas na pele. Seu corpo entende isso como um machucado e envia uma cascata de fatores de crescimento e colágeno novo para cicatrizar a região. Além disso, esses microfuros servem como canais para entregarmos ativos clareadores ou rejuvenescedores diretamente nas camadas profundas da pele.", cta: "Tem medo de agulhas? Fique tranquila, usamos anestésico tópico. Agende sua avaliação." },
+    { titulo: "Como destruir o resultado do seu procedimento estético", gancho: "Você pagou caro pelo procedimento no consultório, mas fez isso ao chegar em casa e jogou seu dinheiro fora.", desenvolvimento: "O sucesso de qualquer tratamento estético é 50% no consultório e 50% em casa. Se você faz um peeling químico para clarear manchas e vai ao sol sem protetor no dia seguinte, sua pele vai manchar o dobro. Se você faz Botox e vai para academia pesada logo em seguida, a toxina pode migrar para outro músculo e causar assimetria.", cta: "Compartilhe este vídeo com aquela amiga que nunca segue as orientações pós-procedimento." },
+    { titulo: "Você tem celulite ou apenas retenção de líquidos?", gancho: "Você acorda com as pernas finas, mas no final do dia elas estão inchadas, pesadas e cheias de furinhos?", desenvolvimento: "Muitas mulheres confundem celulite com retenção hídrica severa. Se os furinhos pioram muito no período pré-menstrual ou no final do dia, grande parte do seu problema é inchaço. Nesses casos, antes de gastar com tratamentos caros para quebrar gordura, o ideal é investir em sessões regulares de Drenagem Linfática Manual, beber muita água e reduzir o sódio da dieta.", cta: "Sente as pernas pesadas no fim do dia? Agende uma sessão de drenagem linfática pelo link da bio." },
+    { titulo: "Tomar colágeno em pó funciona ou é jogar dinheiro fora?", gancho: "Você toma colágeno em pó todos os dias achando que ele vai direto para as rugas do seu rosto? A biologia não funciona assim.", desenvolvimento: "O colágeno é uma proteína grande. Quando você o ingere, seu estômago o quebra em pedaços menores (aminoácidos) para ser absorvido. Seu corpo, que é uma máquina de sobrevivência, vai mandar esses aminoácidos para onde ele acha mais importante: curar um músculo machucado, para as articulações, para os ossos. A pele é o último lugar da fila.", cta: "Salve este vídeo para não comprar o colágeno errado na farmácia." },
+    { titulo: "Por que seus pelos voltam depois da depilação?", gancho: "Você fechou um pacote de 10 sessões de depilação, os pelos sumiram, mas 6 meses depois voltaram todos? Você provavelmente não fez laser.", desenvolvimento: "Existe uma diferença gigante entre Laser e Luz Intensa Pulsada (fotodepilação). A luz pulsada enfraquece a raiz do pelo, fazendo ele dormir por um tempo, mas não o destrói definitivamente. Já o Laser é um feixe de luz concentrado que viaja pelo pigmento do pelo até a raiz, destruindo o folículo de forma definitiva.", cta: "Quer se livrar dos pelos de verdade? Agende sua avaliação para depilação a laser." },
+    { titulo: "A área do seu corpo que revela a sua verdadeira idade", gancho: "Você cuida do rosto com os melhores produtos, mas o seu pescoço e as suas mãos estão entregando a sua idade.", desenvolvimento: "A pele do pescoço, colo e dorso das mãos é extremamente fina, tem poucas glândulas sebáceas e fica exposta ao sol o tempo todo. Por isso essas áreas envelhecem, mancham e ficam flácidas muito antes do rosto. O erro é parar o skincare na linha da mandíbula. Tudo o que você passa no rosto deve descer para o pescoço e colo.", cta: "Você estende seu skincare para o pescoço? Responda nos comentários." },
+    { titulo: "Fazer peeling químico afina a pele?", gancho: "Você tem medo de fazer peeling porque acha que sua pele vai ficar fina, sensível e descamando como um cobra?", desenvolvimento: "Esse é um dos maiores mitos da estética. O peeling químico remove as camadas superficiais de células mortas e danificadas. O que acontece depois é exatamente o oposto: ao remover essa camada velha, estimulamos a renovação celular e a produção de colágeno na derme. O resultado a longo prazo é uma pele mais espessa, firme e resistente.", cta: "Quer renovar a textura da sua pele? Clique no link da bio e agende seu peeling." },
+    { titulo: "O perigo da harmonização facial exagerada", gancho: "Por que todo mundo que faz harmonização facial está ficando com o mesmo rosto quadrado e lábios exagerados?", desenvolvimento: "A verdadeira harmonização facial não é sobre transformar o seu rosto no rosto de outra pessoa ou seguir um 'molde' padrão do Instagram. É sobre realçar a sua beleza natural, devolver a estrutura que você perdeu com o envelhecimento e suavizar assimetrias. O melhor procedimento estético é aquele que todo mundo nota que você está mais bonita, mas ninguém consegue apontar exatamente o que você fez.", cta: "Se você busca resultados naturais e elegantes, siga meu perfil." },
+  ],
+
+  nutricao: [
+    { titulo: "Por que você não precisa cortar o pão para emagrecer", gancho: "Você cortou o pão francês do café da manhã, substituiu por tapioca e não emagreceu 1 grama? Eu te explico o porquê.", desenvolvimento: "O terrorismo nutricional te fez acreditar que o pão francês é o grande vilão do emagrecimento. Mas 50g de pão francês tem praticamente as mesmas calorias e carboidratos que 50g de tapioca. A diferença é que a tapioca tem índice glicêmico ainda maior e zero fibras. O que engorda não é o pão, é o que você coloca dentro dele e a quantidade que você come ao longo do dia.", cta: "Você prefere pão ou tapioca? Me conte nos comentários." },
+    { titulo: "A verdade sobre água com limão em jejum", gancho: "Você acorda, espreme um limão na água morna e toma em jejum achando que isso vai derreter a gordura da sua barriga?", desenvolvimento: "Fisiologicamente falando, nenhum alimento tem o poder de 'derreter' gordura. A água com limão é ótima para te hidratar e fornecer um pouco de vitamina C, mas ela não alcaliniza o seu sangue e muito menos acelera o seu metabolismo a ponto de causar emagrecimento.", cta: "Compartilhe este vídeo com quem ainda acredita no milagre da água com limão." },
+    { titulo: "Por que sua salada está te engordando", gancho: "Você almoça salada todos os dias para emagrecer, mas a balança não desce? O problema está no que você coloca em cima dela.", desenvolvimento: "Uma bacia de folhas verdes tem pouquíssimas calorias. O problema começa quando você adiciona: azeite à vontade (uma colher de sopa tem 100 calorias), croutons fritos, queijo parmesão, bacon, molhos prontos cheios de açúcar e gordura vegetal. Aquela salada 'fit' que você achou que tinha 200 calorias facilmente ultrapassa 800.", cta: "Salve este vídeo para lembrar de maneirar no azeite da salada." },
+    { titulo: "O alimento 'fit' que você deveria parar de comer", gancho: "Você compra peito de peru achando que é a opção mais saudável para o seu sanduíche? Você está sendo enganado pela indústria.", desenvolvimento: "O peito de peru vendido fatiado no supermercado não é apenas 'carne de peru'. Ele é um embutido ultraprocessado, exatamente da mesma categoria da salsicha e da mortadela. É lotado de sódio, conservantes, corantes e, o pior de tudo, nitritos e nitratos — substâncias que a OMS já classificou como potencialmente cancerígenas.", cta: "Você ainda come peito de peru? Deixe sua resposta nos comentários." },
+    { titulo: "Por que você ataca a geladeira à noite", gancho: "Você passa o dia inteiro comendo igual a um passarinho, mas quando chega a noite, quer devorar a geladeira inteira?", desenvolvimento: "Isso não é falta de vergonha na cara — é biologia básica. Quando você restringe demais as calorias e os carboidratos durante o dia, seu corpo entra em estado de alerta. À noite, quando você relaxa, o seu cérebro primitivo grita por energia rápida para compensar a restrição do dia. O segredo para não ter compulsão noturna é comer carboidratos complexos e proteínas suficientes durante o dia.", cta: "Siga meu perfil para aprender a emagrecer sem passar fome." },
+    { titulo: "Você ainda come de 3 em 3 horas para acelerar o metabolismo?", gancho: "Se o seu nutricionista ainda te obriga a comer de 3 em 3 horas com a desculpa de 'acelerar o metabolismo', ele parou no tempo.", desenvolvimento: "A ciência da nutrição já provou que a frequência das refeições não altera o seu metabolismo basal. O que importa para o emagrecimento é o déficit calórico total no final do dia. Se você come 1500 calorias divididas em 6 refeições ou em 3 refeições, o resultado na balança será o mesmo.", cta: "Quantas refeições você faz por dia? Comente aqui embaixo." },
+    { titulo: "O nutriente que está faltando no seu prato", gancho: "Você sente fome uma hora depois de almoçar e vive beliscando o dia todo? O seu prato está com deficiência de proteína.", desenvolvimento: "A proteína é o macronutriente que mais gera saciedade no nosso corpo. Ela demora mais para ser digerida e evita os picos de insulina que te dão fome logo em seguida. Além disso, a proteína é essencial para manter a sua massa muscular durante o emagrecimento, evitando a flacidez.", cta: "Quer saber a quantidade ideal de proteína para você? Agende uma consulta pelo link da bio." },
+    { titulo: "O suco de caixinha que é pior que refrigerante", gancho: "Você parou de dar refrigerante para o seu filho e trocou por aquele suco de caixinha de néctar de uva ou pêssego?", desenvolvimento: "Pegue a caixinha e leia os ingredientes. A maioria dos 'néctares' de fruta tem água como primeiro ingrediente e açúcar como segundo. A quantidade de fruta real ali dentro é mínima — às vezes menos de 30%. Um copo desse suco pode ter a mesma quantidade ou mais de açúcar adicionado que um copo de refrigerante de cola.", cta: "Compartilhe este vídeo no grupo das mães para alertá-las." },
+    { titulo: "Por que você engorda o dobro depois de uma dieta maluca", gancho: "Você fez a dieta da sopa, perdeu 5kg em uma semana, mas um mês depois recuperou 8kg? Isso é o efeito sanfona.", desenvolvimento: "Quando você faz uma dieta extremamente restritiva, você perde peso rápido, mas grande parte desse peso é água e massa muscular, não gordura. Seu corpo entende que você está passando por um período de fome severa e desacelera o metabolismo para economizar energia. Quando você volta a comer normalmente, seu metabolismo está lento e seu corpo armazena tudo como gordura.", cta: "Fuja de dietas malucas. Siga meu perfil para aprender a emagrecer de forma definitiva." },
+    { titulo: "3 passos para fazer seu intestino funcionar todo dia", gancho: "Você passa dias sem ir ao banheiro, sente a barriga estufada e o humor péssimo? Seu intestino precisa de ajuda.", desenvolvimento: "Passo 1: Fibras insolúveis. Você precisa de 'vassouras' para limpar o intestino. Inclua farelo de aveia, psyllium, mamão e folhas verdes escuras na dieta. Passo 2: Água. Comer muita fibra sem beber água é como colocar cimento no encanamento — vai entupir de vez. Passo 3: Movimento. O intestino é um músculo — se você é sedentário, seu intestino também será.", cta: "Salve este vídeo e comece a aplicar esses 3 passos hoje mesmo." },
+    { titulo: "Por que o 'Dia do Lixo' está destruindo sua dieta", gancho: "Você passa a semana inteira comendo frango com batata doce para poder 'chutar o balde' no final de semana?", desenvolvimento: "O conceito de 'dia do lixo' é péssimo para a sua saúde mental e física. Primeiro, porque comida não é lixo. Segundo, porque cria uma relação de restrição e compulsão: você sofre de segunda a sexta para se entupir de comida no sábado e domingo, muitas vezes comendo até passar mal.", cta: "Você costuma fazer o 'dia do lixo'? Me conte nos comentários como você se sente depois." },
+    { titulo: "Produtos Zero Glúten e Zero Lactose emagrecem?", gancho: "Você não tem intolerância à lactose nem doença celíaca, mas compra produtos 'Zero' achando que emagrecem?", desenvolvimento: "Isso é puro marketing. Retirar o glúten ou a lactose não reduz as calorias do alimento. Pelo contrário: muitos produtos sem glúten, como pães e biscoitos, usam farinha de arroz ou fécula de batata, que têm índice glicêmico maior e menos fibras que a farinha de trigo integral. Se você não tem diagnóstico médico de intolerância ou alergia, não há motivo para cortar esses nutrientes.", cta: "Compartilhe este vídeo com quem gasta uma fortuna com produtos 'Zero' sem necessidade." },
+    { titulo: "A regra de ouro para montar o prato perfeito", gancho: "Você não precisa pesar a sua comida para emagrecer. Basta usar a regra visual do prato perfeito.", desenvolvimento: "Divida o seu prato imaginariamente. A primeira metade inteira com vegetais (salada crua e legumes cozidos). Eles vão te dar saciedade, vitaminas e fibras com pouquíssimas calorias. Agora, divida a outra metade em duas partes. Em um quarto, coloque a proteína (carne, frango, peixe, ovos). No último quarto, o carboidrato (arroz com feijão, batata, macarrão).", cta: "Salve este vídeo para lembrar dessa regra no seu próximo almoço." },
+    { titulo: "O que acontece quando você zera o carboidrato", gancho: "Você cortou 100% do carboidrato da sua vida para emagrecer rápido? Veja o que está acontecendo com o seu corpo.", desenvolvimento: "O carboidrato é a principal e preferida fonte de energia do seu cérebro e dos seus músculos. Quando você zera o carboidrato, você sente dor de cabeça, irritabilidade extrema, mau hálito, fraqueza muscular e queda de cabelo. Além disso, seu corpo começa a quebrar a sua própria massa muscular para transformar proteína em energia. Low carb inteligente é reduzir, não zerar.", cta: "Você já tentou zerar o carboidrato? Como você se sentiu? Comente aqui." },
+    { titulo: "Por que dormir pouco está te impedindo de emagrecer", gancho: "Você faz dieta perfeita, treina todos os dias, mas dorme 5 horas por noite? É por isso que você não emagrece.", desenvolvimento: "O emagrecimento não acontece na academia, acontece na cama. Quando você tem privação crônica de sono, seu corpo aumenta a produção de grelina (hormônio da fome) e diminui a leptina (hormônio da saciedade). Além disso, o cortisol elevado favorece o acúmulo de gordura abdominal e aumenta a resistência à insulina.", cta: "Siga meu perfil para entender como o seu corpo realmente funciona." },
+    { titulo: "O iogurte 'fit' que é uma bomba de açúcar", gancho: "Você compra aquele iogurte de morango com embalagem rosa achando que é super saudável para o seu lanche?", desenvolvimento: "Vire a embalagem e leia os ingredientes. A maioria desses iogurtes saborizados tem açúcar, xarope de glicose, amido modificado, corantes artificiais e espessantes. Um iogurte verdadeiramente saudável e natural deve ter apenas dois ingredientes: leite e fermento láctico. Só isso.", cta: "Salve este vídeo para não errar na próxima vez que for ao supermercado." },
+    { titulo: "Óleo de coco é realmente melhor para cozinhar?", gancho: "Você gasta uma fortuna no óleo de coco achando que ele é a opção mais saudável para o seu coração? A ciência diz o contrário.", desenvolvimento: "O óleo de coco foi vendido pelo marketing como um 'superalimento', mas a verdade é que ele é composto por mais de 80% de gordura saturada — aquela que, em excesso, aumenta o colesterol ruim e o risco de doenças cardiovasculares. Ele tem mais gordura saturada que banha de porco e manteiga.", cta: "Qual óleo você usa para cozinhar na sua casa? Deixe nos comentários." },
+    { titulo: "Como saber se você está com fome ou apenas ansioso", gancho: "Você acabou de almoçar, mas meia hora depois sente uma vontade incontrolável de comer um doce? Isso não é fome.", desenvolvimento: "Aprenda a diferenciar a fome física da fome emocional. A fome física aparece aos poucos, aceita qualquer tipo de comida e passa quando você está satisfeito. A fome emocional é urgente, repentina e específica: você não quer 'comida', você quer aquele chocolate específico. Ela não passa com a saciedade do estômago, porque o que você está tentando preencher não é o estômago — é a ansiedade.", cta: "Se você sofre com fome emocional, clique no link da bio e agende uma consulta." },
+    { titulo: "Qual é o melhor adoçante para substituir o açúcar?", gancho: "Você trocou o açúcar pelo adoçante, mas usa aquele de sucralose ou aspartame que deixa um gosto amargo no final?", desenvolvimento: "Nem todo adoçante é igual. Adoçantes artificiais como sucralose, aspartame e ciclamato, quando consumidos em excesso, podem alterar a sua microbiota intestinal e até piorar a resistência à insulina. As melhores opções, mais seguras e naturais, são a Stevia (100% pura), o Eritritol e o Xilitol.", cta: "Salve este vídeo para lembrar quais adoçantes comprar." },
+    { titulo: "O único suplemento que (quase) todo mundo deveria tomar", gancho: "Se você tivesse que escolher apenas um suplemento para investir o seu dinheiro, esqueça o Whey Protein ou o BCAA. A resposta é a Creatina.", desenvolvimento: "A creatina é o suplemento com maior nível de evidência científica do mundo. Ela não é bomba, não dá pedra nos rins e não engorda. Além de aumentar a força e a massa muscular em quem treina, estudos recentes mostram que a creatina é fantástica para o cérebro: melhora a cognição, a memória e é excelente para prevenir a perda de massa muscular em idosos.", cta: "Você já toma creatina? Tem alguma dúvida sobre ela? Deixe nos comentários." },
+  ],
+
+  advocacia: [
+    { titulo: "O que a empresa não pode fazer na demissão por justa causa", gancho: "Você foi demitido por justa causa e a empresa espalhou isso para todos os seus colegas de trabalho? Isso é ilegal.", desenvolvimento: "A demissão por justa causa é a punição máxima no direito do trabalho, mas ela tem regras rígidas. A empresa não pode expor o motivo da sua demissão para os outros funcionários, não pode colocar essa informação na sua Carteira de Trabalho (CTPS) e não pode te humilhar publicamente. Se isso acontecer, além de poder reverter a justa causa na Justiça do Trabalho, você tem direito a uma indenização por danos morais.", cta: "Compartilhe este vídeo com aquele amigo que precisa saber dos seus direitos." },
+    { titulo: "A pensão alimentícia é sempre 30% do salário?", gancho: "'Eu só preciso pagar 30% do meu salário de pensão alimentícia.' Esse é o maior mito do Direito de Família.", desenvolvimento: "Não existe nenhuma lei no Brasil que fixe a pensão alimentícia em 30% do salário. O juiz define o valor com base no binômio: Necessidade x Possibilidade. Qual é a necessidade real da criança e qual é a possibilidade financeira de quem vai pagar. Se o pai ganha muito bem e a criança tem necessidades altas, a pensão pode ser muito maior que 30%.", cta: "Salve este vídeo para não cair mais nesse mito dos 30%." },
+    { titulo: "O que fazer se o seu voo for cancelado", gancho: "Seu voo foi cancelado e a companhia aérea só te ofereceu um pedido de desculpas? Você tem direitos que eles não te contam.", desenvolvimento: "Segundo a ANAC, se o seu voo atrasar mais de 1 hora, a empresa tem que fornecer comunicação. Mais de 2 horas: alimentação. Mais de 4 horas: hospedagem e transporte. Se o voo for cancelado, você tem direito de escolher entre ser reacomodado no próximo voo, receber o reembolso integral ou remarcar a viagem.", cta: "Vai viajar nas férias? Salve este vídeo para ter na manga se precisar." },
+    { titulo: "Quem sai de casa no divórcio perde os direitos?", gancho: "Você quer se divorciar, mas tem medo de sair de casa e perder o direito aos seus bens? Pode ficar tranquilo.", desenvolvimento: "O mito do 'abandono do lar' assombra muita gente. Sair de casa porque a convivência se tornou insuportável não faz você perder o direito à sua parte da casa, do carro ou do dinheiro na conta. O que a lei pune é o abandono financeiro e material da família por um longo período — não a saída física da casa durante um processo de separação.", cta: "Conhece alguém passando por um divórcio? Envie este vídeo para tranquilizar essa pessoa." },
+    { titulo: "Como devolver um produto comprado na internet (mesmo sem defeito)", gancho: "Você comprou uma roupa na internet, ela chegou perfeita, mas você simplesmente não gostou de como ficou no corpo. Você pode devolver?", desenvolvimento: "Sim, você pode, e a loja é obrigada a aceitar. O Código de Defesa do Consumidor garante o 'Direito de Arrependimento' para qualquer compra feita fora do estabelecimento comercial. Você tem 7 dias corridos, a contar do recebimento do produto, para desistir da compra, sem precisar justificar o motivo. E o melhor: a loja tem que devolver 100% do valor pago, incluindo o frete.", cta: "Você já teve problemas para devolver um produto online? Me conte nos comentários." },
+    { titulo: "O truque do 'cargo de confiança' para não pagar hora extra", gancho: "A empresa te deu o título de 'Gerente' só para parar de te pagar horas extras? Isso pode ser uma fraude trabalhista.", desenvolvimento: "Para a lei trabalhista, não basta ter o nome de 'cargo de confiança' no crachá. Para não ter direito a horas extras, você precisa ter real poder de mando e gestão (poder contratar, demitir, advertir funcionários) e receber um adicional de pelo menos 40% sobre o seu salário base. Se você é chamado de gerente, mas bate ponto e não pode tomar decisões sem pedir permissão, você é um funcionário comum e tem direito a todas as horas extras trabalhadas.", cta: "Siga meu perfil para aprender a proteger os seus direitos no trabalho." },
+    { titulo: "Os filhos herdam as dívidas dos pais falecidos?", gancho: "Seu pai faleceu e deixou uma dívida enorme no banco. O banco pode cobrar essa dívida de você?", desenvolvimento: "A resposta curta é: Não. No Brasil, nenhuma dívida passa da pessoa que faleceu para os seus herdeiros pessoalmente. O que acontece é que a dívida é paga com o patrimônio (herança) que o falecido deixou. Se ele deixou uma casa de 300 mil e uma dívida de 100 mil, a dívida é paga e os herdeiros dividem os 200 mil restantes. Se ele deixou uma dívida de 100 mil e nenhum bem, a dívida 'morre' com ele.", cta: "Compartilhe este vídeo para tranquilizar quem está passando por essa situação." },
+    { titulo: "O que fazer quando o plano de saúde nega a cirurgia", gancho: "O seu médico prescreveu uma cirurgia de urgência e o plano de saúde negou dizendo que 'não está no rol da ANS'?", desenvolvimento: "Essa é uma das práticas mais abusivas dos planos de saúde. A Justiça brasileira entende que quem define o tratamento adequado para o paciente é o médico, e não o plano de saúde. Se a doença tem cobertura pelo contrato, o tratamento prescrito pelo médico também deve ser coberto. Se você receber uma negativa, peça a recusa por escrito. Com esse documento e o laudo médico, você pode conseguir uma liminar na Justiça em questão de horas.", cta: "Salve este vídeo. Você nunca sabe quando vai precisar dessa informação." },
+    { titulo: "Baterem no seu carro? Faça isso imediatamente", gancho: "Bateram na traseira do seu carro, a pessoa pediu desculpas, disse que ia pagar e depois sumiu? Veja como evitar isso.", desenvolvimento: "No momento do acidente, a palavra da pessoa não vale nada. Você precisa produzir provas. Passo 1: Tire fotos de todos os ângulos dos carros, mostrando as placas e a posição na via. Passo 2: Pegue o nome completo, telefone e tire uma foto da CNH do outro motorista. Passo 3: Procure testemunhas. Passo 4: Faça o Boletim de Ocorrência online no mesmo dia.", cta: "Envie este vídeo para aquele amigo que acabou de comprar um carro." },
+    { titulo: "Guarda compartilhada significa que a criança mora 15 dias com cada um?", gancho: "Você acha que na guarda compartilhada a criança fica com a mochila nas costas, pulando de casa em casa toda semana?", desenvolvimento: "Isso é um erro muito comum. Guarda compartilhada não é dividir o tempo da criança no meio. Significa dividir as responsabilidades e as decisões importantes sobre a vida do filho — qual escola vai estudar, qual médico vai frequentar. A criança continua tendo uma residência base e o outro genitor tem um regime de convivência estabelecido.", cta: "Tem dúvidas sobre guarda de filhos? Deixe sua pergunta nos comentários." },
+    { titulo: "Como provar que você sofre assédio moral no trabalho", gancho: "Seu chefe grita com você, te humilha na frente dos outros ou te dá metas impossíveis de bater? Isso é assédio moral.", desenvolvimento: "O maior desafio do assédio moral é provar que ele acontece, porque geralmente é feito de forma velada. Como você se protege? Primeiro: anote tudo — com datas, horários e o que foi dito. Segundo: guarde e-mails, mensagens de WhatsApp e áudios que comprovem a pressão abusiva. Terceiro: testemunhas — colegas de trabalho que presenciaram as humilhações são a prova mais forte na Justiça do Trabalho.", cta: "Você já passou por uma situação de assédio no trabalho? Siga meu perfil para saber como se defender." },
+    { titulo: "A multa abusiva que todo contrato de aluguel tem", gancho: "Você vai sair do imóvel alugado antes do prazo e a imobiliária quer te cobrar 3 meses de aluguel de multa? Isso está errado.", desenvolvimento: "A Lei do Inquilinato é clara: a multa por quebra de contrato deve ser sempre proporcional ao tempo que falta para o contrato acabar. Cobrar a multa integral, independentemente do tempo que você já morou no imóvel, é uma prática abusiva e ilegal.", cta: "Compartilhe este vídeo com quem mora de aluguel." },
+    { titulo: "Colocaram seu nome no SPC/Serasa por engano?", gancho: "Você foi tentar fazer um cartão de crédito e descobriu que seu nome está sujo por uma dívida que você nunca fez?", desenvolvimento: "A negativação indevida do nome do consumidor é um dos erros mais graves que uma empresa pode cometer. Quando isso acontece — seja por fraude, dívida já paga ou erro do sistema — a Justiça entende que o dano moral é 'in re ipsa', ou seja, é presumido. Você não precisa provar que passou vergonha. O simples fato de ter o nome sujo injustamente já te dá o direito a uma indenização financeira.", cta: "Salve este vídeo para saber o que fazer se sujarem seu nome por engano." },
+    { titulo: "Você está namorando ou já está em uma união estável?", gancho: "Você mora junto com seu namorado, dividem as contas, mas acham que o patrimônio de cada um está protegido? Cuidado.", desenvolvimento: "A linha entre um 'namoro qualificado' e uma união estável é muito tênue. Para a lei, se a relação é pública, contínua, duradoura e com o objetivo de constituir família, é união estável. E o perigo está aqui: se vocês não fizerem um contrato definindo o regime de bens, a lei aplica automaticamente a comunhão parcial — tudo que vocês comprarem pertence aos dois, meio a meio.", cta: "Envie este vídeo para aquele casal de amigos que acabou de ir morar junto." },
+    { titulo: "A construtora atrasou a entrega do seu apartamento?", gancho: "Você comprou um apartamento na planta, o prazo de entrega já passou e a construtora só te dá desculpas?", desenvolvimento: "Por lei, as construtoras têm um prazo de tolerância de 180 dias de atraso. Passado esse prazo? A construtora está inadimplente. A partir do 181º dia de atraso, você tem direito a uma indenização mensal, geralmente equivalente a 1% do valor do imóvel, por cada mês de atraso. Além disso, se você desistir da compra por culpa do atraso deles, eles devem devolver 100% do valor que você pagou.", cta: "Conhece alguém que comprou imóvel na planta? Compartilhe este vídeo." },
+    { titulo: "Você é PJ, mas trabalha como CLT?", gancho: "A empresa te obrigou a abrir um CNPJ para te contratar, mas você tem que bater ponto e obedecer ordens? Isso é uma fraude trabalhista.", desenvolvimento: "Isso se chama 'pejotização' e é uma fraude trabalhista muito comum. Para a Justiça do Trabalho, não importa o que está escrito no contrato — importa a realidade do dia a dia. Se você trabalha com pessoalidade, habitualidade, subordinação e onerosidade, você é um funcionário CLT. Você pode entrar na Justiça e cobrar férias, 13º, FGTS e FGTS de todo o período trabalhado.", cta: "Você trabalha como PJ ou CLT? Deixe nos comentários." },
+    { titulo: "Ex-esposa tem direito à pensão por morte do INSS?", gancho: "O ex-marido faleceu. A atual esposa e a ex-esposa vão ter que dividir a pensão por morte do INSS?", desenvolvimento: "Depende de um detalhe crucial: a ex-esposa recebia pensão alimentícia dele? Se a resposta for sim, ela tem direito a dividir a pensão por morte com a atual esposa e com os filhos menores de 21 anos. O INSS entende que, se ela recebia pensão alimentícia, ela era dependente econômica do falecido.", cta: "Siga meu perfil para entender melhor os seus direitos previdenciários." },
+    { titulo: "Caiu no golpe do Pix? Faça isso imediatamente", gancho: "Clonaram o WhatsApp do seu filho, você fez um Pix para o golpista e agora o banco diz que não pode fazer nada?", desenvolvimento: "O banco pode e deve fazer algo. O Banco Central criou o MED (Mecanismo Especial de Devolução). Assim que perceber o golpe, ligue imediatamente para o banco e peça a abertura de um chamado no MED. O banco vai bloquear o dinheiro na conta do golpista. Além disso, faça o B.O., guarde os prints e procure um advogado.", cta: "Salve este vídeo. Essa informação pode salvar o seu dinheiro no futuro." },
+    { titulo: "Posso deixar toda a minha herança para o meu cachorro?", gancho: "Você assistiu a um filme americano onde o milionário deixou toda a fortuna para o gato e não deixou nada para os filhos. Isso funciona no Brasil?", desenvolvimento: "Não. No Brasil isso é impossível. A nossa lei protege os chamados 'herdeiros necessários' (filhos, pais e cônjuge). Se você tem herdeiros necessários vivos, você só pode dispor livremente de 50% do seu patrimônio em um testamento. Os outros 50% pertencem obrigatoriamente a eles.", cta: "Você já pensou em fazer um testamento? Deixe sua opinião nos comentários." },
+    { titulo: "O que a empresa de cobrança não pode fazer com você", gancho: "Você está devendo, eu sei. Mas isso não dá o direito de a empresa de cobrança ligar para o seu trabalho e contar para o seu chefe.", desenvolvimento: "O Código de Defesa do Consumidor proíbe a cobrança vexatória. A empresa tem o direito de cobrar a dívida, mas não pode te expor ao ridículo, não pode ligar dezenas de vezes por dia, não pode ameaçar e, principalmente, não pode deixar recados com vizinhos, parentes ou colegas de trabalho. Se isso acontecer, você pode processar a empresa por danos morais — a indenização pode até ser maior que o valor da sua dívida.", cta: "Você já sofreu com ligações abusivas de cobrança? Siga meu perfil para saber como agir." },
+  ],
+
+  educacaofisica: [
+    { titulo: "A maioria está fazendo agachamento errado", gancho: "Você está fazendo agachamento há anos, mas provavelmente está fazendo errado.", desenvolvimento: "O agachamento correto começa com os pés na largura dos ombros, joelhos apontando na mesma direção dos pés. Muita gente deixa os joelhos caírem para dentro (valgo), o que sobrecarrega os ligamentos. Desça até que as coxas fiquem paralelas ao chão, mantendo o peito ereto. O peso deve estar nos calcanhares, não na ponta dos pés. Se você sente dor no joelho, provavelmente está fazendo errado.", cta: "Salve este vídeo e corrija sua técnica hoje mesmo. Marque um amigo que precisa ver isso." },
+    { titulo: "Quantas vezes por semana você deve treinar?", gancho: "Você acha que precisa treinar 6 dias por semana para ter resultado? Está errado.", desenvolvimento: "Para iniciantes, 3 vezes por semana é o ideal. Seu corpo precisa de tempo para se recuperar e crescer. É durante o descanso que o músculo se desenvolve, não durante o treino. Se você treina todos os dias sem descanso, está cansando o corpo e não deixando tempo para a adaptação. Além disso, treinar sem descanso aumenta o risco de lesão.", cta: "Qual é sua frequência atual? Deixe nos comentários." },
+    { titulo: "Você está pulando o aquecimento? Isso é perigoso", gancho: "70% das lesões em academia poderiam ser evitadas com um aquecimento adequado.", desenvolvimento: "O aquecimento prepara seu corpo para o exercício: aumenta a temperatura muscular, melhora a flexibilidade, eleva a frequência cardíaca gradualmente e lubrifica as articulações. Um aquecimento de 5 a 10 minutos reduz drasticamente o risco de lesão. Não é perda de tempo — é investimento na sua saúde.", cta: "Comece a aquecer antes de cada treino. Seu corpo agradece." },
+    { titulo: "Você não precisa de suplemento para ganhar massa", gancho: "A indústria de suplementos quer que você acredite que precisa de whey protein para crescer. Você não precisa.", desenvolvimento: "Suplemento é apenas um complemento. A base é treino consistente, alimentação adequada e descanso. Se você não está comendo proteína suficiente (1.6 a 2.2g por quilo de peso corporal), sim, um suplemento ajuda. Mas se você está comendo frango, ovos e feijão, você já tem proteína suficiente. Suplemento não substitui alimentação real.", cta: "Qual é o seu maior mito sobre suplementação? Comente aqui." },
+    { titulo: "Você deve fazer cardio antes ou depois da musculação?", gancho: "A ordem que você faz seus exercícios importa muito mais do que você pensa.", desenvolvimento: "Se seu objetivo é ganhar massa muscular, faça musculação PRIMEIRO. Seu corpo tem energia máxima no início do treino. Se você gasta essa energia com cardio, não vai ter força para levantar peso pesado. Se seu objetivo é emagrecer, você pode fazer cardio depois da musculação — o corpo vai queimar mais gordura. A ordem depende do seu objetivo.", cta: "Qual é o seu objetivo? Musculação, emagrecimento ou resistência? Deixe nos comentários." },
+    { titulo: "Você está alongando errado", gancho: "Alongamento estático antes do treino reduz sua força em até 15%. Você está fazendo errado.", desenvolvimento: "Existem dois tipos: alongamento dinâmico (movimento) e estático (ficar na posição). Antes do treino, use alongamento dinâmico — movimentos de braço, perna. Depois do treino, use alongamento estático — fique 30 segundos em cada posição. Alongamento estático antes do treino deixa o músculo 'frouxo' e reduz força.", cta: "Salve este vídeo para lembrar a sequência correta." },
+    { titulo: "A dor no dia seguinte é normal?", gancho: "Você treinou ontem e hoje está com dor muscular. Isso é bom ou ruim?", desenvolvimento: "Aquela dor que você sente 24 a 48 horas depois do treino é chamada de DOMS e é completamente normal — significa que você trabalhou o músculo. Mas aqui está o detalhe: dor NÃO é sinônimo de crescimento. Você pode crescer sem ter dor. Se a dor persistir além de 5 dias, pode ser lesão. Dor aguda durante o treino é diferente de DOMS — dor aguda significa parar imediatamente.", cta: "Você tem DOMS agora? Deixe nos comentários qual foi o exercício." },
+    { titulo: "Você não está crescendo porque não está aumentando o peso", gancho: "Você treina há meses com o mesmo peso? Seu corpo não vai mudar.", desenvolvimento: "O princípio da progressão de carga é fundamental: você precisa aumentar gradualmente o estímulo para o músculo se adaptar. Se você faz 10 repetições com 20kg há 6 meses, seu corpo já se adaptou. Aumente para 22kg. Pequenos aumentos de 1 a 2kg por semana geram grandes resultados ao longo do tempo. Sem progressão, não há crescimento.", cta: "Qual foi seu último aumento de peso? Comente aqui." },
+    { titulo: "Você não vai crescer sem descanso", gancho: "Treino é apenas 30% do resultado. Os outros 70% é descanso e alimentação.", desenvolvimento: "Muita gente acha que quanto mais treina, mais cresce. Errado. O crescimento acontece durante o descanso. Seu corpo precisa de 7 a 9 horas de sono para se recuperar adequadamente. Durante o sono, hormônios anabólicos como a testosterona são liberados. Se você dorme 5 horas, seu corpo não tem tempo para se recuperar — e treinar cansado aumenta muito o risco de lesão.", cta: "Quantas horas você dorme? Deixe nos comentários." },
+    { titulo: "Flexibilidade e mobilidade não são a mesma coisa", gancho: "Você acha que são iguais? Veja a diferença.", desenvolvimento: "Flexibilidade é a capacidade passiva de um músculo se alongar. Mobilidade é a capacidade ativa de mover uma articulação através de toda sua amplitude de movimento. Você pode ser flexível (conseguir tocar os pés) mas não ter mobilidade (não conseguir fazer um agachamento profundo). Para treinar bem, você precisa de mobilidade, não apenas de flexibilidade.", cta: "Qual é o seu maior problema: flexibilidade ou mobilidade? Comente." },
+    { titulo: "Como evitar tendinite no ombro", gancho: "Tendinite no ombro é a lesão mais comum em academia. Aqui está como evitar.", desenvolvimento: "Tendinite é inflamação do tendão, geralmente causada por sobrecarga ou técnica incorreta. Para evitar: aqueça adequadamente, use técnica correta, não aumente o peso muito rápido, descanse entre séries, alongue regularmente. Se você sente dor no ombro, não ignore. Procure um fisioterapeuta. Muita gente continua treinando com dor e piora a lesão.", cta: "Você tem dor no ombro? Procure um profissional. Não ignore." },
+    { titulo: "O que comer depois do treino?", gancho: "Você treinou duro. Agora precisa comer certo para crescer.", desenvolvimento: "Depois do treino, seu corpo precisa de proteína para reparar o músculo e carboidrato para repor energia. Você não precisa comer nos primeiros 5 minutos — a 'janela anabólica' é um mito. Você tem até 2 horas depois do treino para comer. Uma refeição simples: frango com arroz, atum com batata doce, ou até uma banana com whey. O importante é ter proteína e carboidrato.", cta: "O que você come depois do treino? Deixe nos comentários." },
+    { titulo: "Você precisa de academia para crescer?", gancho: "Você acha que só consegue ganhar massa na academia? Está errado.", desenvolvimento: "Você pode crescer em casa com pouco equipamento: halteres ajustáveis, barra de pull-up, colchonete. O importante é o estímulo, não o lugar. Você pode fazer flexão (peito), agachamento com peso (pernas), rosca (braço) em casa. A academia oferece mais variedade e peso pesado, mas não é obrigatória. Se você não tem grana para academia, comece em casa.", cta: "Você treina em casa ou academia? Qual é sua preferência?" },
+    { titulo: "Você está treinando demais?", gancho: "Treinar demais é tão ruim quanto não treinar.", desenvolvimento: "Síndrome do overtraining acontece quando você treina mais do que seu corpo consegue se recuperar. Sinais: fadiga constante, queda de performance, insônia, irritabilidade, inflamação crônica. Se você está treinando 2 horas por dia, 6 dias por semana, provavelmente está fazendo overtraining. Treino eficiente é 45 a 60 minutos, 4 a 5 dias por semana. Qualidade sobre quantidade.", cta: "Você acha que está fazendo overtraining? Comente aqui." },
+    { titulo: "Qual a diferença entre treinar para hipertrofia e força?", gancho: "Você quer ficar grande ou quer ficar forte? A resposta muda seu treino.", desenvolvimento: "Hipertrofia é crescimento muscular (tamanho). Força é a capacidade de levantar peso pesado. Para hipertrofia: 8 a 12 repetições, 3 a 4 séries, descanso de 60 segundos. Para força: 3 a 6 repetições, 5 a 6 séries, descanso de 3 a 5 minutos, peso muito pesado. Você pode combinar os dois, mas o treino é diferente.", cta: "Qual é o seu objetivo? Tamanho ou força? Deixe nos comentários." },
+    { titulo: "Sua postura está destruindo seu corpo", gancho: "Se você passa 8 horas por dia sentado com postura ruim, seu corpo está pagando o preço.", desenvolvimento: "Postura ruim causa dor nas costas, pescoço, ombros. Além disso, afeta seu desempenho no treino. Comece a corrigir: sente direito, ombros para trás, queixo paralelo ao chão. No treino, mantenha a coluna neutra. Isso muda tudo — você vai treinar melhor, sentir menos dor e ter melhor desempenho.", cta: "Corrija sua postura agora. Seu corpo agradece." },
+    { titulo: "Por que você está pulando treino de perna?", gancho: "80% das pessoas não treina perna consistentemente. Você é uma delas?", desenvolvimento: "Perna é o maior grupo muscular do corpo. Treinar perna libera hormônios anabólicos que beneficiam o corpo todo. Além disso, perna queima muita caloria, ajuda no emagrecimento e melhora a saúde cardiovascular. Se você quer crescer, treina perna. Se você quer emagrecer, treina perna. Se você quer ficar saudável, treina perna. Sem desculpas.", cta: "Quando foi a última vez que você treinou perna? Comente aqui." },
+    { titulo: "Por que você deve variar seus exercícios?", gancho: "Você faz os mesmos 5 exercícios há 1 ano? Seu corpo não vai mudar mais.", desenvolvimento: "Seu corpo se adapta aos estímulos. Se você faz o mesmo exercício por muito tempo, seu corpo para de responder. Varie: mude o ângulo, mude o equipamento, mude a ordem dos exercícios. Isso força seu corpo a se adaptar novamente. Você não precisa mudar tudo toda semana, mas a cada 4 a 8 semanas, faça mudanças. Isso mantém o progresso e evita o platô.", cta: "Qual exercício você faz há mais tempo? Está na hora de variar?" },
+    { titulo: "Você não está bebendo água suficiente", gancho: "70% das pessoas não bebe água suficiente. Isso mata seu desempenho.", desenvolvimento: "Água é essencial para tudo: transporte de nutrientes, regulação de temperatura, lubrificação de articulações, performance. Se você está desidratado, sua força cai, seu desempenho cai, seu corpo não cresce. Beba 3 a 4 litros por dia (mais se treinar). Não espere ter sede. Beba regularmente. Durante o treino, beba a cada 15 a 20 minutos.", cta: "Quantos litros de água você bebe por dia? Deixe nos comentários." },
+    { titulo: "O segredo para crescer é consistência, não intensidade", gancho: "Você quer saber o segredo dos caras que crescem? Não é genética, não é suplemento. É consistência.", desenvolvimento: "Consistência é treinar 3 vezes por semana, toda semana, por meses e anos. É comer bem mesmo quando não tem vontade. É dormir 8 horas mesmo quando quer ficar acordado. Muita gente quer resultados em 30 dias. Resultados reais levam 3 a 6 meses. Se você for consistente por 1 ano, vai ficar irreconhecível. O segredo não é fazer muito em pouco tempo — é fazer o básico consistentemente por muito tempo.", cta: "Você está sendo consistente? Comece hoje. Seu eu do futuro agradece." },
+  ],
+
+  fisioterapia: [
+    { titulo: "80% das pessoas com dor nas costas não sabem a verdadeira causa", gancho: "Você tem dor nas costas há anos? Provavelmente não é o que você pensa.", desenvolvimento: "Dor nas costas tem várias causas: postura ruim (mais comum), fraqueza muscular, hérnia de disco, inflamação, trauma. Muita gente acha que é hérnia quando é apenas postura ruim. Outros acham que é muscular quando é inflamação. O diagnóstico correto é essencial. Se você tem dor nas costas, procure um fisioterapeuta. Tratamento errado não funciona.", cta: "Qual é a sua causa de dor nas costas? Deixe nos comentários." },
+    { titulo: "Seu pescoço dói porque você passa 8 horas no celular", gancho: "Você sente dor no pescoço? Aqui está o culpado.", desenvolvimento: "Quando você olha para o celular, seu pescoço fica inclinado. Seu pescoço suporta 5kg (peso da cabeça). Quando você inclina, suporta 12kg. Faça isso 8 horas por dia e seu pescoço vai doer. Solução: coloque o celular na altura dos olhos, faça pausas a cada 30 minutos, alongue o pescoço e fortaleça os músculos.", cta: "Qual é a sua postura agora? Corrija e deixe nos comentários." },
+    { titulo: "Tendinite é mais comum do que você pensa", gancho: "Você sente dor no ombro, cotovelo ou punho? Pode ser tendinite.", desenvolvimento: "Tendinite é inflamação do tendão, causada por sobrecarga ou movimento repetitivo. Comum em atletas, digitadores e pessoas que levantam peso errado. Sinais: dor, inchaço, dificuldade de movimento. Prevenção: aquecimento antes da atividade, técnica correta, descanso entre atividades, alongamento. Se você tem tendinite, repouso mais fisioterapia é igual a cura.", cta: "Você tem tendinite? Procure um fisioterapeuta." },
+    { titulo: "Seus dedos dormem à noite? Pode ser síndrome do túnel do carpo", gancho: "Você acorda com os dedos dormindo? Aqui está o porquê.", desenvolvimento: "Síndrome do túnel do carpo é compressão do nervo mediano no pulso. Causas: digitação excessiva, movimentos repetitivos, inflamação. Sintomas: dedos dormindo principalmente à noite, dor no pulso, fraqueza na mão, formigamento. Prevenção: pausas frequentes, alongamento do pulso, postura correta. Se não tratar, pode virar crônico. Procure fisioterapeuta.", cta: "Você tem esses sintomas? Comente aqui." },
+    { titulo: "Essa dor no ombro pode ser bursite", gancho: "Você tem dor aguda no ombro? Pode ser bursite.", desenvolvimento: "Bursite é inflamação da bolsa sinovial — estrutura que reduz o atrito entre ossos e músculos. Comum no ombro, quadril, cotovelo. Causas: sobrecarga, trauma, inflamação. Sintomas: dor aguda, inchaço, calor local, dificuldade de movimento. Tratamento: repouso, gelo, fisioterapia e, se necessário, medicação. Não ignore bursite, pode virar crônica.", cta: "Você tem dor no ombro? Deixe nos comentários." },
+    { titulo: "Como evitar entorse de tornozelo", gancho: "Você já torceu o tornozelo? Aqui está como evitar.", desenvolvimento: "Entorse é estiramento ou ruptura de ligamentos do tornozelo. Causas: movimento brusco, superfície irregular, fraqueza muscular. Prevenção: fortaleça o tornozelo com exercícios de equilíbrio, use sapato adequado, aqueça antes da atividade, alongue. Se entorsar: repouso, gelo, compressão, elevação e fisioterapia. Não ignore entorse — pode virar crônica.", cta: "Você já teve entorse? Como tratou? Comente." },
+    { titulo: "Hérnia de disco não é o fim do mundo", gancho: "Você foi diagnosticado com hérnia de disco e acha que nunca mais vai treinar? Errado.", desenvolvimento: "Hérnia de disco é quando o núcleo do disco intervertebral sai do lugar. Mito: 'Hérnia é igual a dor crônica'. Verdade: 90% das hérnias não causam sintomas. Mito: 'Preciso fazer cirurgia'. Verdade: 95% das hérnias melhoram com fisioterapia. Mito: 'Não posso mais treinar'. Verdade: você pode treinar com os exercícios corretos. Fisioterapia mais exercício é igual a recuperação.", cta: "Você tem hérnia de disco? Procure um fisioterapeuta." },
+    { titulo: "Artrose não é motivo para parar de se mexer", gancho: "Você foi diagnosticado com artrose e acha que tem que ficar parado? Errado.", desenvolvimento: "Artrose é desgaste da cartilagem articular. Comum no joelho, quadril, coluna. O maior mito: 'parar de se mexer ajuda'. A verdade: movimento ajuda. Articulações precisam de movimento para se lubrificar. Exercício mais fisioterapia é igual a alívio de dor. Exercícios de baixo impacto como natação e pilates são ideais.", cta: "Você tem artrose? Qual é o seu maior desafio? Comente." },
+    { titulo: "Seu ombro está ficando rígido? Pode ser frozen shoulder", gancho: "Você está perdendo movimento no ombro? Aqui está o porquê.", desenvolvimento: "Frozen shoulder é rigidez do ombro, causada por inflamação e cicatrização. Fases: dor (2 a 3 meses), rigidez (4 a 6 meses), recuperação (6 a 12 meses). Causas: imobilidade, diabetes, trauma. Tratamento: fisioterapia é essencial. Exercícios de mobilidade mais alongamento é igual a recuperação. Não deixe evoluir — procure fisioterapeuta cedo.", cta: "Você tem frozen shoulder? Deixe nos comentários." },
+    { titulo: "Sua postura está destruindo seu corpo", gancho: "Se você passa 8 horas sentado com postura ruim, seu corpo está pagando o preço.", desenvolvimento: "Postura ruim causa: dor nas costas, dor no pescoço, dor de cabeça, problemas respiratórios e digestivos. Postura correta: coluna reta, ombros para trás, queixo paralelo ao chão. Faça pausas a cada 30 minutos. Alongue. Fortaleça os músculos das costas. Postura correta é igual a saúde.", cta: "Corrija sua postura agora. Seu corpo agradece." },
+    { titulo: "3 exercícios que aliviam dor nas costas em 2 semanas", gancho: "Você tem dor nas costas? Esses 3 exercícios vão ajudar.", desenvolvimento: "Exercício 1: Ponte (fortalece glúteos e costas). Deite-se, levante o quadril. 3 séries de 15 repetições. Exercício 2: Gato-vaca (mobiliza coluna). De quatro, alterne entre arquear e abaixar. 3 séries de 10 repetições. Exercício 3: Alongamento de costas. Deite-se, puxe joelhos ao peito. 30 segundos, 3 repetições. Faça diariamente. Resultado em 2 semanas.", cta: "Qual exercício você vai começar? Comente aqui." },
+    { titulo: "Reabilitação pós-cirurgia é tão importante quanto a cirurgia", gancho: "Você foi operado e acha que está curado? Errado — agora começa a reabilitação.", desenvolvimento: "Cirurgia é apenas o começo. Reabilitação é o que determina o sucesso. Fases: proteção (primeiras semanas), mobilização (semanas 2 a 6), fortalecimento (semanas 6 em diante). Fisioterapia acelera recuperação, previne complicações e garante retorno funcional. Muita gente pula reabilitação e depois reclama que não melhorou.", cta: "Você está em reabilitação? Deixe nos comentários." },
+    { titulo: "Você está alongando errado", gancho: "Alongamento estático antes do treino reduz sua força. Você está fazendo errado.", desenvolvimento: "Dois tipos: alongamento dinâmico (movimento) — antes do treino. Alongamento estático (ficar na posição) — depois do treino. Alongamento estático antes do treino deixa o músculo 'frouxo' e reduz força. Mantenha cada alongamento 30 segundos. Não force demais — deve ser confortável. Faça diariamente.", cta: "Qual é o seu alongamento favorito? Comente." },
+    { titulo: "Flexibilidade e mobilidade não são a mesma coisa", gancho: "Você acha que são iguais? Veja a diferença.", desenvolvimento: "Flexibilidade é a capacidade passiva de um músculo se alongar. Mobilidade é a capacidade ativa de mover uma articulação. Você pode ser flexível mas não ter mobilidade. Para treinar bem, você precisa de mobilidade. Trabalhe mobilidade dinâmica antes do treino e flexibilidade estática depois. Resultado: melhor desempenho, menos lesão.", cta: "Qual é o seu maior problema: flexibilidade ou mobilidade? Comente." },
+    { titulo: "Prevenção é melhor que cura", gancho: "Você está esperando se lesionar para procurar fisioterapeuta? Errado.", desenvolvimento: "Prevenção inclui: aquecimento adequado, técnica correta, progressão gradual, descanso, alongamento e fortalecimento. Muita gente ignora prevenção e depois sofre com lesão crônica. Lesão crônica é mais difícil de tratar. Invista em prevenção agora, economize sofrimento depois.", cta: "Qual é a sua maior preocupação com lesão? Comente." },
+    { titulo: "Essa dor muscular pode ser ponto gatilho", gancho: "Você tem dor muscular que não passa? Pode ser ponto gatilho.", desenvolvimento: "Dor miofascial é dor causada por pontos gatilho — nós de tensão muscular. Causas: sobrecarga, postura ruim, estresse. Tratamento: massagem, liberação miofascial com foam roller, alongamento e fisioterapia. Liberação miofascial é uma técnica que quebra esses nós. Resultado: alívio de dor em dias.", cta: "Você tem ponto gatilho? Deixe nos comentários." },
+    { titulo: "Equilíbrio é essencial para evitar quedas", gancho: "Você tem dificuldade de equilíbrio? Aqui está como melhorar.", desenvolvimento: "Propriocepção é a capacidade de saber onde seu corpo está no espaço. Importante para evitar quedas, melhorar performance em esportes e recuperação de lesão. Exercícios: ficar em pé em uma perna, caminhar em linha reta, usar bola de estabilidade. Faça diariamente. Resultado: melhor equilíbrio, menos quedas.", cta: "Qual é o seu maior desafio com equilíbrio? Comente." },
+    { titulo: "Você está respirando errado", gancho: "Respiração correta muda tudo na recuperação.", desenvolvimento: "Respiração diafragmática (barriga) é melhor que respiração torácica (peito). Respiração diafragmática: respire pelo nariz, deixe a barriga inchar, expire pela boca lentamente. Benefícios: reduz estresse, melhora oxigenação, acelera recuperação, reduz dor. Faça 5 minutos diariamente. Resultado: melhor recuperação.", cta: "Você vai começar a respirar corretamente? Comente aqui." },
+    { titulo: "Como voltar ao esporte após lesão", gancho: "Você se lesionou e quer voltar ao esporte? Aqui está como fazer com segurança.", desenvolvimento: "Retorno ao esporte tem fases: repouso (primeiras semanas), mobilização (semanas 2 a 4), fortalecimento (semanas 4 a 8), propriocepção (semanas 8 a 12), esporte específico (semanas 12 em diante). Não pule fases. Muita gente volta rápido e se relesiona. Retorno progressivo é igual a sucesso. Fisioterapia é essencial.", cta: "Você está retornando ao esporte? Deixe nos comentários." },
+    { titulo: "Você deveria ter procurado fisioterapeuta há meses", gancho: "Dor? Procure fisioterapeuta. Não espere piorar.", desenvolvimento: "Procure fisioterapeuta se: dor que não passa em 2 semanas, dor que piora com movimento, inchaço, dificuldade de movimento, formigamento, fraqueza. Quanto mais cedo você procura, mais rápido melhora. Lesão aguda é mais fácil de tratar que crônica. Não deixe piorar.", cta: "Você tem algum desses sintomas? Procure um fisioterapeuta." },
+  ],
+
+  harmonizacao: [
+    { titulo: "90% dos profissionais de harmonização cometem esse erro", gancho: "Você está aplicando botox errado. Aqui está o porquê.", desenvolvimento: "O erro: aplicar botox apenas nas rugas visíveis. O correto: aplicar botox na musculatura que CAUSA as rugas. A diferença é enorme: errado resulta em efeito superficial que dura 2 meses. Correto resulta em efeito profundo que dura 4 meses. Exemplo: ruga de testa não é só na testa, é no frontal mais o corrugador. Se você não injetar no corrugador, a ruga volta rápido. Análise anatômica é essencial.", cta: "Qual é o seu maior erro em harmonização? Comente aqui." },
+    { titulo: "Existe uma fórmula matemática para a beleza", gancho: "Rosto bonito não é opinião, é matemática.", desenvolvimento: "O Golden Ratio (1.618) é a proporção que aparece em rostos considerados bonitos. Proporções: distância olho-olho igual à largura de um olho, altura do rosto igual a 3 vezes a altura da testa, largura do nariz igual à largura do olho, lábios igual a 1/3 da distância nariz-queixo. Harmonização profissional usa essas proporções — você não está 'embelezando', você está 'harmonizando'. Embelezar é subjetivo, harmonizar é científico.", cta: "Qual é a sua proporção facial? Analise e comente." },
+    { titulo: "Análise facial é 80% do resultado", gancho: "Você está pulando a análise? Aí está o problema.", desenvolvimento: "Análise facial profunda inclui: proporções (Golden Ratio), simetria (diferenças entre lados), tipo de pele, musculatura facial, estrutura óssea, histórico médico e expectativas do paciente. Sem análise profunda, você faz o procedimento errado. Exemplo: paciente quer lábios maiores, mas o problema real é queixo pequeno. Se você só aumenta os lábios, fica desproporcional.", cta: "Qual é o seu maior desafio em análise facial? Comente." },
+    { titulo: "Ninguém tem rosto simétrico, mas você pode corrigir", gancho: "Seu rosto é assimétrico. Aqui está como corrigir.", desenvolvimento: "Assimetrias comuns: um olho mais alto que outro, um lado da boca mais alto, queixo desviado, nariz torto, maçãs do rosto diferentes. Correção: preenchimento assimétrico (mais de um lado), botox estratégico (reduz movimento de um lado), fios de sustentação (levanta um lado). Importante: não é corrigir 100% — é equilibrar para parecer simétrico. Profissional que entende assimetria faz resultado natural.", cta: "Qual é a sua assimetria? Você gostaria de corrigir? Comente." },
+    { titulo: "Entender dinâmica facial é essencial para harmonização", gancho: "Você não entende como o rosto se move? Aí está o erro.", desenvolvimento: "Músculos faciais principais: frontal (levanta sobrancelha), corrugador (franzir testa), orbicular do olho (piscar), zigomático (sorrir), masseter (mastigar). Cada músculo tem função. Botox reduz movimento muscular. O importante é reduzir o movimento certo, não o errado. Exemplo: reduzir orbicular do olho causa dificuldade para piscar — ruim. Reduzir corrugador reduz rugas de expressão — bom.", cta: "Qual é o seu maior desafio com dinâmica facial? Comente." },
+    { titulo: "Mais produto NÃO significa melhor resultado", gancho: "Você está usando muito produto. Aqui está o problema.", desenvolvimento: "Dosagem correta de botox: testa 15 a 20 unidades, glabela (entre sobrancelhas) 20 a 25 unidades, pés de galinha 12 a 15 unidades. Mais que isso resulta em rosto congelado. Menos que isso resulta em sem efeito. Preenchimento: lábios 0.5 a 1mL, maçãs 0.5 a 1mL. Mais resulta em lábios gigantes. Profissional que domina dosagem faz resultado natural e duradouro.", cta: "Qual é a sua dosagem ideal? Deixe nos comentários." },
+    { titulo: "A profundidade da injeção muda tudo", gancho: "Você está injetando na profundidade errada.", desenvolvimento: "Profundidades: Botox é intramuscular (dentro do músculo), preenchimento é subdérmico (abaixo da pele), fios são subcutâneos (mais profundo). Ângulo: Botox perpendicular (90 graus), preenchimento a 45 graus (melhor distribuição). Profundidade errada resulta em resultado ruim. Exemplo: Botox subcutâneo resulta em sem efeito. Preenchimento intramuscular resulta em inflamação.", cta: "Qual é a sua maior dúvida sobre técnica? Comente aqui." },
+    { titulo: "Nem todo preenchimento é igual", gancho: "Você está usando o preenchimento errado para cada área.", desenvolvimento: "Tipos de preenchimento: ácido hialurônico (reversível, 6 a 12 meses) — melhor para lábios; Radiesse (estimula colágeno, 12 a 18 meses) — melhor para maçãs; Sculptra (estimula colágeno, 2 anos) — melhor para volume geral; gordura autóloga (permanente) — melhor para volume grande. Cada um tem indicação. Profissional que escolhe certo faz resultado melhor e duradouro.", cta: "Qual preenchimento você gostaria de usar? Deixe nos comentários." },
+    { titulo: "Complicações em harmonização facial (e como evitar)", gancho: "Ninguém fala sobre complicações, mas elas existem.", desenvolvimento: "Complicações possíveis: hematoma (roxo) — normal, passa em 1 semana; edema (inchaço) — normal, passa em 3 dias; assimetria — evitar com análise correta; granulomas — reação ao preenchimento, raro; necrose — injetar em artéria, muito raro. Como evitar: conhecer a anatomia vascular, usar agulha ou cânula corretamente, não injetar demais, seguir protocolo.", cta: "Qual é a sua maior preocupação com complicações? Comente." },
+    { titulo: "Resultado natural é 10x melhor que resultado 'operado'", gancho: "Você quer parecer operado ou quer parecer bem?", desenvolvimento: "Resultado natural: pessoas não sabem que você fez procedimento, você fica bonito naturalmente, movimento facial normal, proporções equilibradas. Resultado 'operado': todos sabem que você fez, rosto exagerado, movimento facial limitado, proporções desproporcionais. A diferença está na quantidade de produto, técnica e análise. Profissional bom faz natural. Profissional ruim faz exagerado.", cta: "Você prefere natural ou exagerado? Comente aqui." },
+    { titulo: "Manutenção em harmonização facial é estratégia, não rotina", gancho: "Você está fazendo manutenção errada.", desenvolvimento: "Manutenção errada: repetir o mesmo procedimento a cada 3 meses — resultado fica igual. Manutenção estratégica: meses 1 a 3, botox mais preenchimento; meses 4 a 6, apenas botox (economia); meses 7 a 9, botox mais peeling (renovação); meses 10 a 12, fios (lifting). Estratégia: variar procedimentos, economizar, melhorar resultado.", cta: "Qual é a sua estratégia de manutenção? Deixe nos comentários." },
+    { titulo: "Combinar procedimentos = resultado exponencial", gancho: "Um procedimento é bom, mas dois juntos é 10x melhor.", desenvolvimento: "Combinações que funcionam: Botox mais preenchimento resulta em rosto jovem e volumoso; peeling mais microagulhamento resulta em pele renovada com colágeno; fios mais preenchimento resulta em lifting com volume; Botox mais fios resulta em reduz rugas com sustentação. Sinergia: cada procedimento potencializa o outro. Resultado: melhor que cada um sozinho.", cta: "Qual combinação você gostaria de fazer? Comente." },
+    { titulo: "Como evitar paciente insatisfeito", gancho: "Você está perdendo pacientes por falta de comunicação.", desenvolvimento: "Causas de insatisfação: expectativa errada (paciente esperava mais), resultado diferente do esperado, comunicação ruim, falta de acompanhamento. Como evitar: conversa clara sobre expectativas, mostrar fotos de resultados similares, explicar limitações, acompanhamento pós-procedimento, oferecer ajuste se necessário. Comunicação é 50% do resultado.", cta: "Qual é o seu maior desafio com paciente? Comente aqui." },
+    { titulo: "Tendências em harmonização facial 2025", gancho: "Harmonização facial está mudando. Aqui estão as tendências.", desenvolvimento: "Tendências: resultado natural (menos é mais), prevenção precoce (botox aos 20 a 25 anos), combinação de procedimentos, tecnologia (laser, radiofrequência, ultrassom), foco em bem-estar (não apenas beleza), harmonização corporal (não só rosto). O que NÃO é tendência: rosto exagerado, lábios gigantes, maçãs enormes. Profissional que acompanha tendências permanece sempre relevante.", cta: "Qual tendência você quer seguir? Deixe nos comentários." },
+    { titulo: "Por que o preço varia tanto em harmonização facial?", gancho: "Você achou barato? Cuidado.", desenvolvimento: "Diferenças: profissional iniciante (R$ 200 a 500) versus experiente (R$ 1.000 a 3.000); formação em curso online versus residência médica; experiência de 6 meses versus 10 anos; consultório simples versus premium; resultado ruim versus resultado ótimo. Barato geralmente resulta em resultado ruim. Caro geralmente resulta em resultado bom. Investir em profissional bom resulta em resultado melhor e duradouro.", cta: "Qual é o seu orçamento? Comente aqui." },
+    { titulo: "Essas pessoas NÃO devem fazer harmonização facial", gancho: "Você tem alguma dessas condições? Não faça.", desenvolvimento: "Contraindicações reais: gravidez e amamentação (risco para o bebê), alergia comprovada aos componentes, inflamação ativa (acne, herpes), anticoagulantes (risco de sangramento excessivo), doenças autoimunes descontroladas, cicatrização anormal, expectativa irreal. Profissional qualificado avalia contraindicações. Não faça procedimento sem avaliação. Responsabilidade do profissional é dizer 'não' quando necessário.", cta: "Você tem alguma contraindicação? Procure profissional." },
+    { titulo: "Protocolo de recuperação que funciona", gancho: "Você está fazendo errado a recuperação.", desenvolvimento: "Protocolo correto: primeiras 24h — não tocar, não deitar, não fazer exercício; primeiras 48h — protetor solar SPF 50+, hidratação; primeiros 7 dias — evitar calor, álcool, sauna; primeiros 14 dias — maquiagem leve. Sinais normais: roxo e inchaço (passam em 3 a 7 dias). Sinais de alerta: dor excessiva, inflamação, infecção — procure profissional. Protocolo correto resulta em recuperação rápida e resultado melhor.", cta: "Qual é o seu maior desafio na recuperação? Comente." },
+    { titulo: "Como analisar foto para diagnóstico correto", gancho: "Você está analisando foto errado.", desenvolvimento: "Análise correta: foto frontal sem filtro e com luz natural, foto de perfil sem filtro e com luz natural, foto em 3/4 sem filtro e com luz natural, expressão neutra (sem sorrir), expressão dinâmica (sorrindo, franzindo). Sem essas fotos, o diagnóstico é incompleto. Filtro esconde problemas reais. Luz artificial muda proporções. Profissional que analisa foto corretamente faz diagnóstico correto.", cta: "Você tem fotos para análise? Deixe nos comentários." },
+    { titulo: "Resultado em harmonização facial é progressivo, não imediato", gancho: "Você esperava resultado imediato? Aqui está a timeline real.", desenvolvimento: "Timeline: Botox leva 3 a 7 dias para começar, 14 dias para resultado máximo; preenchimento tem resultado imediato, mas melhora em 2 semanas (inchaço diminui); fios têm resultado imediato, melhora em 1 mês (colágeno se forma); peeling tem resultado em 1 semana (descamação); microagulhamento tem resultado em 4 semanas (colágeno novo). Resultado melhora com o tempo. Não julgue resultado nos primeiros dias.", cta: "Qual é a sua expectativa de timeline? Comente aqui." },
+    { titulo: "Saber quando parar é tão importante quanto saber quando começar", gancho: "Você sabe quando parar?", desenvolvimento: "Sinais de parar: rosto começa a parecer 'operado', movimento facial limitado, proporções desproporcionais, paciente insatisfeito mesmo com mais procedimentos, resultado não melhora mais. Importante: harmonização é sobre equilíbrio, não sobre quantidade. Profissional responsável diz 'não' quando necessário. Melhor profissional é aquele que sabe quando parar. Paciente que confia em profissional que sabe parar é paciente fiel.", cta: "Você sabe quando parar? Deixe nos comentários." },
+  ],
+
+  socialmedia: [
+    { titulo: "O algoritmo do Instagram não é tão complicado quanto você pensa", gancho: "Você acha que o algoritmo é aleatório? Ele segue 3 regras simples.", desenvolvimento: "O algoritmo do Instagram prioriza: 1) Tempo em que você passa vendo o post (se você fica 5 segundos, é bom), 2) Interações (comentários, compartilhamentos, salvos), 3) Relevância (se você segue pessoas similares). Não é sobre quantos seguidores você tem. É sobre engajamento. Um post com 100 seguidores mas 50 comentários vai chegar em mais gente do que um post com 10.000 seguidores e 2 comentários.", cta: "Qual é o seu maior desafio com o algoritmo? Comente aqui." },
+    { titulo: "Qual é a melhor hora para postar no Instagram?", gancho: "Você está postando na hora errada. Veja quando o seu público está online.", desenvolvimento: "Não existe 'melhor hora universal'. Depende do seu público. Se você segue profissionais de saúde, eles estão online entre 12h e 14h (pausa do almoço) e 19h e 21h (depois do trabalho). Se você segue estudantes, eles estão online à noite (21h às 23h). Você precisa testar. Poste em diferentes horários e veja qual gera mais engajamento. Use as estatísticas do Instagram (Insights) para ver quando seu público está mais ativo.", cta: "Qual é o melhor horário para o seu público? Deixe nos comentários." },
+    { titulo: "Esses 5 tipos de conteúdo viralizam sempre", gancho: "Se você quer viralizar, crie UM desses 5 tipos.", desenvolvimento: "1) Conteúdo educativo (dicas, tutoriais), 2) Conteúdo emocional (histórias, inspiração), 3) Conteúdo engraçado (humor, sátira), 4) Conteúdo controverso (opinião forte, debate), 5) Conteúdo de tendência (usando trending topics). Esses 5 tipos geram engajamento consistente. Escolha UM que você domina e crie conteúdo baseado nele. Não tente fazer todos ao mesmo tempo.", cta: "Qual desses 5 tipos você mais cria? Comente." },
+    { titulo: "Qual é o tamanho ideal de vídeo para cada plataforma?", gancho: "Você está fazendo vídeos muito longos. Veja o tamanho ideal.", desenvolvimento: "Instagram Reels: 15 a 30 segundos (máximo 90s). TikTok: 15 a 60 segundos. YouTube Shorts: 15 a 60 segundos. Facebook: 1 a 3 minutos. LinkedIn: 30 segundos a 1 minuto. Vídeos curtos geram mais engajamento porque as pessoas têm pouca atenção. Se você faz vídeo de 5 minutos no Reels, 90% vai pular. Mantenha curto, direto e interessante.", cta: "Qual é o seu tamanho de vídeo ideal? Deixe nos comentários." },
+    { titulo: "Os primeiros 3 segundos definem se as pessoas vão ver seu vídeo", gancho: "80% das pessoas pulam vídeos nos primeiros 3 segundos. Aqui está como não deixar pular.", desenvolvimento: "Seu gancho precisa responder: 'Por que devo ver esse vídeo?' Use: 1) Pergunta (faz a pessoa pensar), 2) Curiosidade (deixa em suspense), 3) Benefício (promete algo), 4) Emoção (surpresa, riso, raiva). Exemplo de gancho ruim: 'Olá, hoje vou falar sobre marketing'. Exemplo de gancho bom: 'Você está fazendo marketing errado. Aqui está como consertar'. O segundo cria urgência.", cta: "Qual é o seu melhor gancho? Compartilhe um exemplo." },
+    { titulo: "Como escrever uma caption que gera comentários", gancho: "Sua caption é chata. Aqui está como fazer as pessoas comentarem.", desenvolvimento: "Caption perfeita tem: 1) Primeira linha impactante (resumo), 2) Desenvolvimento (contexto), 3) Pergunta no final (para gerar comentários). Exemplo: 'Você está fazendo marketing errado. [Explicação]. Qual é o seu maior desafio? Comente.' Muita gente não coloca pergunta e depois reclama que não tem comentários. Perguntas geram comentários. Sempre termine com uma pergunta.", cta: "Qual é a sua dúvida sobre captions? Deixe nos comentários." },
+    { titulo: "Você está usando hashtags errado", gancho: "Colocar 30 hashtags aleatórias não funciona. Aqui está o jeito certo.", desenvolvimento: "Hashtags funcionam assim: 1) Use 10 a 15 hashtags relevantes (não 30), 2) Misture hashtags grandes (1M+ posts) com pequenas (10k a 100k posts), 3) Crie uma hashtag própria para sua marca, 4) Pesquise hashtags que seu público usa. Hashtags específicas têm menos concorrência e mais conversão.", cta: "Qual é a sua hashtag principal? Deixe nos comentários." },
+    { titulo: "Carrossel, Reels ou Stories? Qual você deve usar?", gancho: "Cada formato tem um objetivo. Escolha o certo.", desenvolvimento: "Carrossel (múltiplas imagens): para conteúdo educativo, passo a passo, antes e depois. Reels (vídeo curto): para conteúdo viral, tendências, humor. Stories (desaparece em 24h): para conteúdo casual, bastidores, urgência. Use carrossel para educar, Reels para viralizar, Stories para engajar. Não misture: não faça Reels educativo longo (use carrossel).", cta: "Qual formato você mais usa? Comente aqui." },
+    { titulo: "Comentários positivos vendem mais que sua propaganda", gancho: "92% das pessoas acreditam mais em recomendações de outras pessoas do que em publicidade.", desenvolvimento: "Prova social é quando outras pessoas recomendam você. Funciona assim: 1) Peça para clientes comentarem, 2) Responda comentários positivos com emoji ou coração, 3) Compartilhe depoimentos nos Stories, 4) Crie vídeo com depoimentos. Comentários positivos são mais poderosos que qualquer anúncio que você pague. Por quê? Porque é de verdade. Pessoas confiam em pessoas, não em marcas.", cta: "Você tem depoimentos de clientes? Compartilhe um aqui." },
+    { titulo: "Você não vai crescer se não postar consistentemente", gancho: "Você posta uma semana, depois some por um mês. Seu crescimento é zero.", desenvolvimento: "Algoritmo favorece contas consistentes. Se você posta 3 vezes por semana, o algoritmo aprende seu padrão e distribui melhor. Consistência também gera confiança: seu público sabe quando esperar seu conteúdo. Crie um calendário: segunda, quarta, sexta (exemplo). Cumpra religiosamente. Consistência por 3 meses resulta em crescimento exponencial.", cta: "Qual é a sua frequência de postagem? Deixe nos comentários." },
+    { titulo: "Seus dados estão aqui, mas você não está olhando", gancho: "Instagram te mostra exatamente o que funciona. Você está ignorando.", desenvolvimento: "No Instagram, clique em 'Insights' (perfil profissional). Veja: 1) Qual post teve mais alcance, 2) Qual horário seu público está online, 3) Qual tipo de conteúdo gera mais engajamento, 4) Qual é o seu público demográfico. Use essas informações para criar mais conteúdo similar. Se vídeo educativo funciona, crie mais vídeos educativos. Se seu público está online às 19h, poste às 19h. Dados não mentem.", cta: "Qual é o seu post com melhor performance? Comente aqui." },
+    { titulo: "Parcerias crescem sua conta 10x mais rápido", gancho: "Você está tentando crescer sozinho. Faça parcerias.", desenvolvimento: "Parcerias funcionam assim: 1) Encontre alguém com público similar, 2) Proponha fazer conteúdo juntos, 3) Cada um posta para sua audiência, 4) Ambos crescem. Exemplo: você é nutricionista, faz parceria com personal trainer. Você posta dica de nutrição para treino, ele posta treino para ganhar massa. Ambos ganham seguidores um do outro. Parcerias são win-win.", cta: "Qual seria a sua parceria ideal? Deixe nos comentários." },
+    { titulo: "Tendências viralizam. Aqui está como usar", gancho: "Quando uma tendência explode, você tem 24 a 48 horas para aproveitar.", desenvolvimento: "Tendências funcionam em ciclos: surge uma música, meme ou desafio; influenciadores usam; explode em 24h; morre em 48h. Se você quer viralizar, use a tendência nas primeiras 24h. Mas aqui está o segredo: adapte para seu nicho. Se é tendência de dança, você não precisa dançar. Você pode fazer versão educativa. Tendência mais seu nicho resulta em viral.", cta: "Qual tendência você quer aproveitar? Comente." },
+    { titulo: "Pessoas não seguem marcas, seguem pessoas", gancho: "Seu conteúdo é muito 'corporativo'. Mostre o seu lado humano.", desenvolvimento: "Behind-the-scenes (BTS) é conteúdo do seu dia a dia: você trabalhando, seus erros, suas histórias. Pessoas se conectam com pessoas, não com marcas. Se você só posta conteúdo 'perfeito', você parece robô. Se você mostra seus erros, suas risadas, sua realidade, você fica humano. BTS gera mais conexão do que qualquer conteúdo polido.", cta: "Qual é o seu momento BTS mais engraçado? Compartilhe aqui." },
+    { titulo: "Seu CTA é fraco. Aqui está como fazer as pessoas agirem", gancho: "'Deixe um comentário' não funciona. Aqui está o que funciona.", desenvolvimento: "CTA efetivo tem: 1) Ação clara (o que fazer), 2) Urgência (por que fazer agora), 3) Benefício (o que ganhar). Exemplo ruim: 'Comente'. Exemplo bom: 'Comente SIM se você quer aprender a crescer no Instagram'. Veja a diferença? O segundo é específico, cria urgência e tem benefício. CTAs específicas geram 3x mais ação do que genéricas.", cta: "Qual é o seu CTA favorito? Deixe nos comentários." },
+    { titulo: "Comunidade engajada vale mais que 100k seguidores inativos", gancho: "Você tem 10k seguidores mas ninguém interage? Você está fazendo errado.", desenvolvimento: "Comunidade engajada funciona assim: 1) Responda TODOS os comentários (sim, todos), 2) Faça perguntas nos Stories, 3) Crie grupo no WhatsApp ou Telegram, 4) Faça lives interativas. Algoritmo favorece contas com comunidade engajada. Se você tem 1k seguidores mas 500 comentários por post, você vai crescer mais rápido do que alguém com 100k seguidores e 10 comentários.", cta: "Qual é o seu maior desafio em engajar? Comente aqui." },
+    { titulo: "Esse conteúdo vai gerar visualizações por ANOS", gancho: "Você cria conteúdo que morre em 24h. Aqui está como criar conteúdo eterno.", desenvolvimento: "Conteúdo evergreen é conteúdo que não expira: dicas, tutoriais, educação. Exemplo: '5 dicas para ganhar massa' é evergreen (sempre relevante). 'Meu dia no trabalho' é temporal (só relevante hoje). Conteúdo evergreen continua gerando visualizações meses depois. Você posta uma vez e colhe benefícios por meses. Misture: 70% evergreen, 30% temporal.", cta: "Qual é o seu conteúdo evergreen favorito? Deixe nos comentários." },
+    { titulo: "Histórias vendem mais que argumentos", gancho: "Você está tentando convencer com lógica. Tente com histórias.", desenvolvimento: "Storytelling funciona assim: 1) Apresente o problema (seu público se identifica), 2) Mostre a jornada (como você resolveu), 3) Revele a solução (o resultado), 4) Deixe a lição (o aprendizado). Exemplo: 'Eu tinha 5kg de gordura, treinei 6 meses, perdi tudo. Aqui está como fiz.' Histórias prendem porque são reais. Argumentos lógicos não prendem.", cta: "Qual é a sua melhor história? Compartilhe aqui." },
+    { titulo: "Você está tentando agradar todo mundo. Por isso ninguém te segue", gancho: "Nicho é a chave para crescer. Aqui está por quê.", desenvolvimento: "Nicho é o seu público específico. Exemplo: não é 'pessoas que querem emagrecer' (muito genérico). É 'mulheres de 30 a 40 anos que querem emagrecer sem dieta restritiva' (específico). Quando você escolhe nicho, você se torna expert naquele nicho. Pessoas seguem experts. Se você tenta agradar todo mundo, você não é expert em nada.", cta: "Qual é o seu nicho? Deixe nos comentários." },
+    { titulo: "Aqui estão as 5 formas de ganhar dinheiro com Instagram", gancho: "Você tem seguidores mas não ganha nada. Aqui está como monetizar.", desenvolvimento: "5 formas: 1) Afiliados (recomenda produtos, ganha comissão), 2) Produtos próprios (vende o seu produto), 3) Serviços (vende consultoria, coaching), 4) Publicidade (marcas pagam para divulgar), 5) Cursos (cria curso e vende). Escolha UMA que faz sentido para seu nicho. Não tente todas ao mesmo tempo. Monetização vem depois de comunidade engajada. Primeiro construa comunidade, depois monetize.", cta: "Qual forma de monetização você quer tentar? Comente aqui." },
+  ],
+};
+
+// ─── GPS DOS STORIES ──────────────────────────────────────────────────────────
+const GPS_STORIES = {
+  tipos: ["Curiosidade", "História Pessoal", "Engajamento", "Venda Suave"],
+  sequencias3: [
+    {
+      tema: "Autoridade + Conexão",
+      stories: [
+        { numero: 1, tipo: "Curiosidade", texto: "Você sabia que [fato surpreendente da sua área]? 👀 Continua aqui que eu vou te explicar tudo 👇" },
+        { numero: 2, tipo: "Ensinamento", texto: "A verdade é que [explicação direta e valiosa]. Isso muda tudo quando você entende. 👇" },
+        { numero: 3, tipo: "CTA Suave", texto: "Se isso fez sentido para você, me manda uma mensagem. Quero entender mais sobre o seu caso 💬" },
+      ]
+    },
+    {
+      tema: "Dor + Solução",
+      stories: [
+        { numero: 1, tipo: "Dor", texto: "Se você [sintoma/problema comum], presta atenção aqui 👇 isso é pra você." },
+        { numero: 2, tipo: "Solução", texto: "O que eu vejo na prática é [solução ou insight]. Simples assim. Mas poucos falam sobre isso. 👇" },
+        { numero: 3, tipo: "CTA", texto: "Quer entender como isso se aplica ao SEU caso? Me chama no direct 🙌" },
+      ]
+    },
+    {
+      tema: "Rotina + Humanização",
+      stories: [
+        { numero: 1, tipo: "Bastidores", texto: "Bom dia! Começando a semana assim [foto/vídeo da rotina] ☀️ e já pensando em conteúdo pra vocês 👇" },
+        { numero: 2, tipo: "Insight", texto: "No meio da correria de hoje, lembrei de uma coisa importante: [insight da área]. Guarda isso 📌 👇" },
+        { numero: 3, tipo: "CTA", texto: "Se você quer aprender mais sobre [tema], me manda um 'quero' no direct que eu te conto mais 💬" },
+      ]
+    },
+  ],
+  sequencias5: [
+    {
+      tema: "GPS Completo — Autoridade",
+      stories: [
+        { numero: 1, tipo: "Gancho/Fé ou Reflexão", texto: "Bom dia! Hoje comecei com [momento pessoal/reflexão]. E isso me fez pensar em algo importante pra você que me acompanha 👇" },
+        { numero: 2, tipo: "Continuação", texto: "Estou vendo muito isso nos meus atendimentos: [dor ou situação comum do seu público]. Reconhece? 👇" },
+        { numero: 3, tipo: "Rotina/Humanização", texto: "[Foto/vídeo da rotina] Enquanto [atividade], fica com esse pensamento: [mini insight] 👇" },
+        { numero: 4, tipo: "Insight/Autoridade", texto: "A maioria das pessoas [crença limitante]. Mas a verdade é que [quebra de crença + solução]. Isso muda tudo. 👇" },
+        { numero: 5, tipo: "CTA Suave", texto: "Se você se identificou com algo que eu trouxe hoje, me manda uma mensagem. Adoro conversar com quem me acompanha 💬" },
+      ]
+    },
+    {
+      tema: "GPS Vendas — Suave",
+      stories: [
+        { numero: 1, tipo: "Conexão Pessoal", texto: "[Momento do dia/rotina]. Tô aqui pensando em vocês e no conteúdo de hoje 🙏 continua aqui 👇" },
+        { numero: 2, tipo: "Identificação com a dor", texto: "Me conta: você já sentiu que [dor do avatar]? Porque eu vejo isso toda hora e preciso falar sobre isso 👇" },
+        { numero: 3, tipo: "Micro-ensinamento", texto: "O que eu aprendi (e que funciona de verdade) é: [solução prática]. Simples, mas poderoso 👇" },
+        { numero: 4, tipo: "Quebra de crença", texto: "A maioria acha que [objeção comum]. Mas não é bem assim. [Resposta direta e honesta] 👇" },
+        { numero: 5, tipo: "Convite", texto: "Se você quer ir mais fundo nisso, tenho [produto/serviço/conversa gratuita] esperando por você. Me manda um 'quero saber' no direct 💬" },
+      ]
+    },
+  ],
+};
+
+// ─── COMPONENTE PRINCIPAL ────────────────────────────────────────────────────
+function App() {
+  const [especialidadeAtiva, setEspecialidadeAtiva] = useState(null);
+  const [tab, setTab] = useState("roteiros");
+  const [roteiroCopied, setRoteiroCopied] = useState(null);
+  const [showPopup, setShowPopup] = useState(true);
+  const [aceiteTermos, setAceiteTermos] = useState(false);
+  const [roteiroInfinito, setRoteiroInfinito] = useState({ assunto: "", resultado: null, loading: false });
+  const [gpsConfig, setGpsConfig] = useState({ tipo: "3", tema: 0 });
+  const [gpsGerador, setGpsGerador] = useState({ assunto: "", resultado: null, loading: false, tipo: "3", tema: "autoridade", nomeTema: "" });
+
+  const gerarGPS = () => {
+    if (!gpsGerador.assunto.trim()) return;
+    setGpsGerador(prev => ({ ...prev, loading: true, resultado: null }));
+    setTimeout(() => {
+      const assunto = gpsGerador.assunto.trim();
+      const assuntoC = assunto.charAt(0).toUpperCase() + assunto.slice(1);
+      const esp = especialidadeAtiva?.label || "saúde";
+      const tipo = gpsGerador.tipo;
+      const tema = gpsGerador.tema || "autoridade";
+
+      const sequencias = {
+        autoridade: {
+          nome: "Autoridade",
+          stories3: [
+            { numero: 1, tipo: "🎯 Gancho de Autoridade", texto: `Uma coisa que aprendi depois de anos trabalhando com ${assunto}: a maioria das pessoas está fazendo errado. E ninguém fala sobre isso. 👇` },
+            { numero: 2, tipo: "📚 Ensinamento", texto: `Sobre ${assunto}, a ciência já provou que [sua descoberta aqui]. Mas 90% dos profissionais de ${esp} ainda ignoram isso na prática. Quando você muda essa abordagem, os resultados mudam completamente. 👇` },
+            { numero: 3, tipo: "✅ CTA de Autoridade", texto: `Se isso fez sentido pra você, me manda um "quero saber mais" no direct. Tenho um conteúdo completo sobre ${assunto} esperando por você 💬` }
+          ],
+          stories5: [
+            { numero: 1, tipo: "🎯 Gancho — Desperta Curiosidade", texto: `Fica aqui até o final. Vou te contar algo sobre ${assunto} que mudou completamente a minha prática em ${esp}. 👇` },
+            { numero: 2, tipo: "😱 Quebra de Crença", texto: `Durante anos eu acreditei que ${assunto} funcionava de um jeito. Estava errado. Quando aprendi a abordagem correta, meus resultados mudaram do dia pra noite. 👇` },
+            { numero: 3, tipo: "📖 O Ensinamento", texto: `A verdade sobre ${assunto} é: [insira sua visão profissional aqui]. Isso vai contra o que muitos falam, mas os dados provam. E na minha prática, funciona. 👇` },
+            { numero: 4, tipo: "🏆 Prova de Autoridade", texto: `Depois que comecei a aplicar isso com ${assunto}, [resultado que você alcançou ou alcançou com pacientes/clientes]. Não foi sorte. Foi método. 👇` },
+            { numero: 5, tipo: "💬 CTA Direto", texto: `Se você quer aprender como aplicar isso em ${assunto} na sua prática de ${esp}, me manda uma mensagem agora. Vamos conversar. 💜` }
+          ]
+        },
+        engajamento: {
+          nome: "Engajamento",
+          stories3: [
+            { numero: 1, tipo: "🔥 Gancho Polêmico", texto: `Opinião impopular sobre ${assunto}: [sua visão diferente aqui]. Concorda ou discorda? Me conta 👇` },
+            { numero: 2, tipo: "💬 Debate", texto: `Eu sei que muita gente vai discordar sobre ${assunto}. Mas na minha experiência com ${esp}, [sua argumentação aqui]. Qual é a sua experiência? 👇` },
+            { numero: 3, tipo: "🗳️ Interação", texto: `Me manda aqui: você já passou por isso com ${assunto}? Responde com SIM ou NÃO 👆 Quero entender a realidade de quem me acompanha 💬` }
+          ],
+          stories5: [
+            { numero: 1, tipo: "🔥 Abertura Polêmica", texto: `Vou falar algo sobre ${assunto} que pode te incomodar. Mas precisa ser dito. Fica aqui 👇` },
+            { numero: 2, tipo: "😤 A Provocação", texto: `O maior problema com ${assunto} não é falta de informação. É excesso de informação errada. E muita gente que você segue está espalhando isso. 👇` },
+            { numero: 3, tipo: "🧠 A Virada", texto: `Mas calma. Não é pra entrar em pânico. É pra entender o que realmente funciona em ${assunto}. E a resposta é mais simples do que parece. 👇` },
+            { numero: 4, tipo: "💡 O Insight", texto: `Quando o assunto é ${assunto} em ${esp}, o diferencial está em [sua visão única aqui]. Isso é o que separa quem tem resultado de quem fica rodando em círculos. 👇` },
+            { numero: 5, tipo: "🗳️ Convite pra Debate", texto: `Agora me conta: você concorda com essa visão sobre ${assunto}? Responde aqui. Adoro ler cada mensagem 💬` }
+          ]
+        },
+        venda: {
+          nome: "Venda Suave",
+          stories3: [
+            { numero: 1, tipo: "😰 Dor Real", texto: `Se você ainda tem dificuldade com ${assunto}, eu entendo. Passei por isso também. E sei exatamente o que muda esse cenário. 👇` },
+            { numero: 2, tipo: "💡 Solução", texto: `Depois de muito estudo e prática em ${esp}, desenvolvi uma forma de abordar ${assunto} que realmente funciona. Não é teoria. É o que aplico todo dia. 👇` },
+            { numero: 3, tipo: "🚪 Convite", texto: `Se você quer sair do lugar com ${assunto}, me manda uma mensagem agora. Vamos ver se faz sentido trabalharmos juntos 💜` }
+          ],
+          stories5: [
+            { numero: 1, tipo: "🎬 Abertura Empática", texto: `Deixa eu te contar uma história sobre ${assunto} que aconteceu essa semana. Acho que você vai se identificar 👇` },
+            { numero: 2, tipo: "😰 A Dor do Avatar", texto: `Uma pessoa chegou até mim completamente perdida com ${assunto}. Ela havia tentado de tudo, mas nada funcionava. Reconhece esse sentimento? 👇` },
+            { numero: 3, tipo: "🔄 A Virada", texto: `O que descobrimos juntos é que o problema com ${assunto} não era falta de esforço. Era falta de direção. Uma coisa mudou tudo. 👇` },
+            { numero: 4, tipo: "🏆 O Resultado", texto: `Depois de [tempo], ela [resultado conquistado com ${assunto}]. Não porque fez mais. Porque fez certo. Com o método certo para ${esp}. 👇` },
+            { numero: 5, tipo: "💌 Convite Pessoal", texto: `Se essa história te tocou e você quer esse tipo de resultado com ${assunto}, me manda uma mensagem. Quero te conhecer e entender o que você precisa 💜` }
+          ]
+        },
+        humanizacao: {
+          nome: "Humanização",
+          stories3: [
+            { numero: 1, tipo: "🌅 Bastidores", texto: `Hoje foi um dia que me lembrou por que escolhi trabalhar com ${esp} e ${assunto}. Deixa eu te contar 👇` },
+            { numero: 2, tipo: "❤️ A Conexão Humana", texto: `Por trás de cada caso de ${assunto} tem uma pessoa com uma história. E quando a gente lembra disso, muda completamente a forma de trabalhar. 👇` },
+            { numero: 3, tipo: "🙏 Gratidão", texto: `Obrigada por acompanhar minha jornada com ${assunto} em ${esp}. Cada mensagem que recebo me motiva a continuar trazendo conteúdo de verdade pra vocês 💜` }
+          ],
+          stories5: [
+            { numero: 1, tipo: "🌅 Abertura Pessoal", texto: `Bom dia! Começando o dia pensando em ${assunto} e em tudo que aprendi nessa jornada em ${esp}. Entra aqui 👇` },
+            { numero: 2, tipo: "😅 Vulnerabilidade", texto: `Posso ser honesta? Nem sempre foi fácil trabalhar com ${assunto}. Teve momentos que eu quis desistir. Mas algo me fez continuar 👇` },
+            { numero: 3, tipo: "🔄 A Virada Pessoal", texto: `O que mudou foi [momento ou decisão pessoal sua]. A partir daí, minha relação com ${assunto} em ${esp} virou de ponta cabeça. Para o bem. 👇` },
+            { numero: 4, tipo: "💡 O Aprendizado", texto: `O que aprendi sobre ${assunto} nessa jornada é que [lição de vida profissional]. Isso vale muito mais do que qualquer técnica ou protocolo. 👇` },
+            { numero: 5, tipo: "💜 Conexão com o Seguidor", texto: `Se você também tem uma história com ${assunto}, me conta. Adoro saber que não estamos sozinhos nessa caminhada 🙏` }
+          ]
+        },
+        entretenimento: {
+          nome: "Entretenimento",
+          stories3: [
+            { numero: 1, tipo: "😂 Gancho Divertido", texto: `Coisas que todo profissional de ${esp} já ouviu sobre ${assunto}: [situação engraçada e real]. Reconhece? 👇` },
+            { numero: 2, tipo: "🎭 O Plot Twist", texto: `E sabe o que é mais incrível? A resposta correta sobre ${assunto} é exatamente o contrário do que todo mundo acha. A vida tem dessas 😅 👇` },
+            { numero: 3, tipo: "😂 Encerramento Leve", texto: `Se você se identificou, me manda aqui qual é o mito sobre ${assunto} que você mais ouviu. Vou rir (e chorar) junto com você 😂💬` }
+          ],
+          stories5: [
+            { numero: 1, tipo: "🎬 Cena Cômica", texto: `Recriando aquela conversa clássica sobre ${assunto} que todo profissional de ${esp} já teve na vida... Fica aqui 😂 👇` },
+            { numero: 2, tipo: "😤 O Personagem", texto: `Você: [situação séria sobre ${assunto}]. A internet: [resposta absurda que as pessoas dão]. Eu: 🙃 👇` },
+            { numero: 3, tipo: "🧠 A Virada Educativa", texto: `Brincadeiras à parte, sobre ${assunto} o que realmente importa é [informação de valor]. Porque no final, a gente quer resultado mesmo. 👇` },
+            { numero: 4, tipo: "💡 O Insight Leve", texto: `E a lição que fica sobre ${assunto} em ${esp} é: [lição de forma descontraída]. Simples assim. Difícil de aplicar? Talvez. Impossível? Jamais. 👇` },
+            { numero: 5, tipo: "🎉 CTA Divertido", texto: `Agora me conta: qual é a maior loucura que você já ouviu sobre ${assunto}? Me manda aqui que quero montar um compilado 😂💬` }
+          ]
+        }
+      };
+
+      const seq = sequencias[tema] || sequencias.autoridade;
+      const resultado = tipo === "3" ? seq.stories3 : seq.stories5;
+
+      setGpsGerador(prev => ({
+        ...prev,
+        loading: false,
+        resultado,
+        nomeTema: seq.nome
+      }));
+    }, 1200);
+  };
+  const [expandedRoteiro, setExpandedRoteiro] = useState(null);
+
+  const gerarRoteiroInfinito = () => {
+    if (!roteiroInfinito.assunto.trim()) return;
+    setRoteiroInfinito(prev => ({ ...prev, loading: true, resultado: null }));
+
+    setTimeout(() => {
+      const assunto = roteiroInfinito.assunto.trim();
+      const assuntoCapital = assunto.charAt(0).toUpperCase() + assunto.slice(1);
+      const esp = especialidadeAtiva?.label || "saúde";
+
+      // Público-alvo de cada especialidade
+      const isSocialMedia = esp === "Social Media";
+      const isJuridico = esp === "Advocacia";
+      const isFitness = esp === "Educação Física";
+      const isSaude = ["Psicologia","Odontologia","Medicina","Estética","Nutrição","Fisioterapia","Harmonização Facial"].includes(esp);
+      const isHarmonizacao = esp === "Harmonização Facial";
+
+      let conjuntos = [];
+
+      if (isSocialMedia) {
+        // Público: profissional de saúde que quer crescer no Instagram
+        conjuntos = [
+          {
+            titulo: `${assuntoCapital}: o que ninguém te ensinou`,
+            gancho: `Você está errando em ${assunto} e perdendo seguidores por isso. Veja o porquê.`,
+            desenvolvimento: `A maioria dos profissionais de saúde que tenta ${assunto} no Instagram comete o mesmo erro: fala como se estivesse numa aula, não como se estivesse conversando com uma pessoa. Conteúdo que converte seguidores em pacientes precisa ter três elementos: identificação com uma dor real, uma virada de percepção e um próximo passo claro. Quando você domina esses três pilares em ${assunto}, seu perfil para de ser apenas informativo e começa a ser magnético.`,
+            cta: `Salva esse vídeo para revisar na próxima vez que for criar conteúdo sobre ${assunto}.`
+          },
+          {
+            titulo: `Por que seu conteúdo sobre ${assunto} não engaja`,
+            gancho: `Você cria conteúdo sobre ${assunto} mas as pessoas não salvam, não comentam e não te seguem? Eu sei o porquê.`,
+            desenvolvimento: `O problema com ${assunto} no Instagram não é falta de conhecimento — é excesso de técnica e falta de emoção. Seu seguidor não quer uma aula sobre ${assunto}. Ele quer se sentir entendido, descobrir algo que ainda não sabia e acreditar que você pode ajudá-lo. Troque o tom de professor pelo tom de quem já resolveu o problema. Esse simples ajuste transforma ${assunto} em conteúdo que viraliza.`,
+            cta: `Me manda uma mensagem se você quer aprender a criar conteúdo sobre ${assunto} que realmente converte.`
+          },
+          {
+            titulo: `${assuntoCapital} sem perder autoridade`,
+            gancho: `Dá para falar de ${assunto} no Instagram sendo humano e sem parecer amador? Dá. Veja como.`,
+            desenvolvimento: `Muitos profissionais de saúde têm medo de humanizar o conteúdo sobre ${assunto} porque acham que vão perder credibilidade. Mas é exatamente o contrário. Quando você mostra o processo, os erros e os bastidores de ${assunto} na sua rotina, as pessoas confiam mais em você. Autoridade real vem de transparência, não de perfeição. Mostre o que está por trás das suas decisões sobre ${assunto} e observe o engajamento mudar.`,
+            cta: `Siga meu perfil para aprender mais sobre como criar conteúdo autêntico e estratégico.`
+          }
+        ];
+      } else if (isJuridico) {
+        // Público: pessoa que tem dúvida jurídica ou problema legal
+        conjuntos = [
+          {
+            titulo: `${assuntoCapital}: você sabe quais são seus direitos?`,
+            gancho: `Você pode estar perdendo dinheiro agora mesmo por não conhecer seus direitos sobre ${assunto}.`,
+            desenvolvimento: `A maioria das pessoas só procura um advogado sobre ${assunto} quando o problema já virou crise. Mas existe um momento ideal para agir — e ele é muito antes disso. Quando se trata de ${assunto}, o prazo legal começa a correr desde o primeiro dia do problema, não desde quando você decide buscar ajuda. Saber disso pode fazer a diferença entre resolver a situação com facilidade ou perder seus direitos para sempre.`,
+            cta: `Você tem alguma dúvida sobre ${assunto}? Me manda uma mensagem agora.`
+          },
+          {
+            titulo: `O erro mais caro sobre ${assunto}`,
+            gancho: `Sobre ${assunto}, existe um erro que as pessoas cometem e que pode custar muito caro. E é mais comum do que você imagina.`,
+            desenvolvimento: `Quando o assunto é ${assunto}, o maior erro não é agir errado — é não agir a tempo. A lei tem prazos. A prova tem validade. E o que parece um problema pequeno hoje pode se tornar irreversível se você esperar. Antes de tomar qualquer decisão sobre ${assunto}, você precisa entender o que está em jogo e quais são suas opções reais. Isso é o que separa quem resolve de quem lamenta depois.`,
+            cta: `Salve este vídeo e compartilhe com quem está passando por uma situação parecida.`
+          },
+          {
+            titulo: `${assuntoCapital}: o que a lei diz e o que poucos sabem`,
+            gancho: `Sobre ${assunto}, a lei garante mais do que você imagina. O problema é que ninguém te conta isso.`,
+            desenvolvimento: `Em relação a ${assunto}, existem direitos que a maioria das pessoas desconhece completamente. Isso não é culpa sua — o sistema jurídico é complexo e pouco acessível. Mas quando você entende o que a lei realmente diz sobre ${assunto}, você deixa de ser pego de surpresa e passa a tomar decisões com segurança e informação.`,
+            cta: `Tem alguma dúvida sobre ${assunto}? Deixa nos comentários que eu respondo.`
+          }
+        ];
+      } else if (isFitness) {
+        // Público: aluno que quer resultado no treino
+        conjuntos = [
+          {
+            titulo: `${assuntoCapital}: o que está travando seu resultado`,
+            gancho: `Se você treina e não vê resultado em ${assunto}, o problema provavelmente não é o que você pensa.`,
+            desenvolvimento: `A maioria das pessoas que trava em ${assunto} está cometendo um erro muito simples: fazendo mais do que deveria ou menos do que precisa. ${assuntoCapital} tem uma lógica própria. Quando você respeita essa lógica — progressão gradual, técnica correta e recuperação adequada — os resultados aparecem de forma consistente. Sem isso, você pode treinar por anos sem evoluir.`,
+            cta: `Me conta nos comentários qual é sua maior dificuldade com ${assunto}.`
+          },
+          {
+            titulo: `A verdade sobre ${assunto} que ninguém te conta`,
+            gancho: `Você foi enganado sobre ${assunto}. E provavelmente está fazendo errado há muito tempo.`,
+            desenvolvimento: `Existe um mito enorme sobre ${assunto} que se espalhou nas academias e nas redes sociais. A realidade é bem diferente do que a maioria prega. ${assuntoCapital} não exige sofrimento extremo, nem equipamentos caros, nem suplementos milagrosos. Exige consistência, técnica e paciência. Quem entende isso para de buscar atalhos e começa a ter resultados de verdade.`,
+            cta: `Salva esse vídeo para mostrar para aquele amigo que ainda acredita nos mitos sobre ${assunto}.`
+          },
+          {
+            titulo: `${assuntoCapital}: faça isso e veja a diferença`,
+            gancho: `Uma mudança simples em como você aborda ${assunto} pode dobrar seus resultados. Veja qual é.`,
+            desenvolvimento: `Quando o assunto é ${assunto}, a diferença entre quem evolui rápido e quem fica estagnado raramente está no esforço. Está na estratégia. A maioria treina ${assunto} no piloto automático, sem progressão, sem registro e sem ajuste. Quando você passa a tratar ${assunto} como um processo com começo, meio e avaliação, o corpo responde de forma completamente diferente.`,
+            cta: `Siga meu perfil para dicas práticas sobre como otimizar seu treino.`
+          }
+        ];
+      } else {
+        // Saúde em geral: público = paciente com dor, sintoma ou desejo de resultado
+        conjuntos = [
+          {
+            titulo: `${assuntoCapital}: o que está por trás disso`,
+            gancho: `Você sofre com ${assunto} e já tentou de tudo sem resultado? O problema pode estar na causa, não no sintoma.`,
+            desenvolvimento: `A maioria das pessoas que busca ajuda por causa de ${assunto} recebe tratamento para o sintoma, não para a origem do problema. Isso explica por que a melhora é temporária. Quando a abordagem vai fundo na causa real de ${assunto} — seja ela emocional, comportamental, alimentar ou estrutural — os resultados mudam completamente. Você não precisa conviver com ${assunto} para sempre.`,
+            cta: `Se você sofre com ${assunto}, me manda uma mensagem. Quero entender o seu caso.`
+          },
+          {
+            titulo: `Por que ${assunto} piora mesmo quando você faz tudo certo`,
+            gancho: `Você cuida da saúde, segue as recomendações, mas ${assunto} continua te atrapalhando. Esse vídeo explica o porquê.`,
+            desenvolvimento: `${assuntoCapital} tem gatilhos que a maioria das pessoas desconhece. E muitas vezes, o que parece estar ajudando está na verdade alimentando o problema. Pequenos hábitos do dia a dia — que parecem inofensivos — podem ser a razão pela qual ${assunto} não melhora. Identificar esses gatilhos é o primeiro passo para uma mudança real e duradoura.`,
+            cta: `Compartilhe com alguém que também lida com ${assunto} e precisa ouvir isso.`
+          },
+          {
+            titulo: `${assuntoCapital}: o que mudou quando eu passei a tratar diferente`,
+            gancho: `A abordagem que a maioria usa para ${assunto} está errada. E os resultados mostram isso claramente.`,
+            desenvolvimento: `Durante anos, o tratamento padrão para ${assunto} ignorou fatores essenciais. A ciência atual mostra que ${assunto} responde muito melhor quando a abordagem é individualizada, baseada em evidências e centrada no paciente — não no protocolo genérico. Quando você encontra um profissional que entende isso, a diferença nos resultados é imediata e visível.`,
+            cta: `Siga meu perfil para entender como tratar ${assunto} de verdade, sem atalhos e sem milagres.`
+          }
+        ];
+      }
+
+      const r = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      const conjunto = r(conjuntos);
+
+      setRoteiroInfinito(prev => ({
+        ...prev,
+        loading: false,
+        resultado: conjunto
+      }));
+    }, 1500);
+  };
+
+  const gerarGPS = () => {
+    if (!gpsGerador.assunto.trim()) return;
+    setGpsGerador(prev => ({ ...prev, loading: true, resultado: null }));
+    setTimeout(() => {
+      const assunto = gpsGerador.assunto.trim();
+      const assuntoC = assunto.charAt(0).toUpperCase() + assunto.slice(1);
+      const esp = especialidadeAtiva?.label || "saúde";
+      const tipo = gpsGerador.tipo;
+      const tema = gpsGerador.tema || "autoridade";
+
+      const sequencias = {
+        autoridade: {
+          nome: "Autoridade",
+          stories3: [
+            { numero: 1, tipo: "🎯 Gancho de Autoridade", texto: `Uma coisa que aprendi depois de anos trabalhando com ${assunto}: a maioria das pessoas está fazendo errado. E ninguém fala sobre isso. 👇` },
+            { numero: 2, tipo: "📚 Ensinamento", texto: `Sobre ${assunto}, a ciência já provou que [sua descoberta aqui]. Mas 90% dos profissionais de ${esp} ainda ignoram isso na prática. Quando você muda essa abordagem, os resultados mudam completamente. 👇` },
+            { numero: 3, tipo: "✅ CTA de Autoridade", texto: `Se isso fez sentido pra você, me manda um "quero saber mais" no direct. Tenho um conteúdo completo sobre ${assunto} esperando por você 💬` }
+          ],
+          stories5: [
+            { numero: 1, tipo: "🎯 Gancho — Desperta Curiosidade", texto: `Fica aqui até o final. Vou te contar algo sobre ${assunto} que mudou completamente a minha prática em ${esp}. 👇` },
+            { numero: 2, tipo: "😱 Quebra de Crença", texto: `Durante anos eu acreditei que ${assunto} funcionava de um jeito. Estava errado. Quando aprendi a abordagem correta, meus resultados mudaram do dia pra noite. 👇` },
+            { numero: 3, tipo: "📖 O Ensinamento", texto: `A verdade sobre ${assunto} é: [insira sua visão profissional aqui]. Isso vai contra o que muitos falam, mas os dados provam. E na minha prática, funciona. 👇` },
+            { numero: 4, tipo: "🏆 Prova de Autoridade", texto: `Depois que comecei a aplicar isso com ${assunto}, [resultado que você alcançou ou alcançou com pacientes/clientes]. Não foi sorte. Foi método. 👇` },
+            { numero: 5, tipo: "💬 CTA Direto", texto: `Se você quer aprender como aplicar isso em ${assunto} na sua prática de ${esp}, me manda uma mensagem agora. Vamos conversar. 💜` }
+          ]
+        },
+        engajamento: {
+          nome: "Engajamento",
+          stories3: [
+            { numero: 1, tipo: "🔥 Gancho Polêmico", texto: `Opinião impopular sobre ${assunto}: [sua visão diferente aqui]. Concorda ou discorda? Me conta 👇` },
+            { numero: 2, tipo: "💬 Debate", texto: `Eu sei que muita gente vai discordar sobre ${assunto}. Mas na minha experiência com ${esp}, [sua argumentação aqui]. Qual é a sua experiência? 👇` },
+            { numero: 3, tipo: "🗳️ Interação", texto: `Me manda aqui: você já passou por isso com ${assunto}? Responde com SIM ou NÃO 👆 Quero entender a realidade de quem me acompanha 💬` }
+          ],
+          stories5: [
+            { numero: 1, tipo: "🔥 Abertura Polêmica", texto: `Vou falar algo sobre ${assunto} que pode te incomodar. Mas precisa ser dito. Fica aqui 👇` },
+            { numero: 2, tipo: "😤 A Provocação", texto: `O maior problema com ${assunto} não é falta de informação. É excesso de informação errada. E muita gente que você segue está espalhando isso. 👇` },
+            { numero: 3, tipo: "🧠 A Virada", texto: `Mas calma. Não é pra entrar em pânico. É pra entender o que realmente funciona em ${assunto}. E a resposta é mais simples do que parece. 👇` },
+            { numero: 4, tipo: "💡 O Insight", texto: `Quando o assunto é ${assunto} em ${esp}, o diferencial está em [sua visão única aqui]. Isso é o que separa quem tem resultado de quem fica rodando em círculos. 👇` },
+            { numero: 5, tipo: "🗳️ Convite pra Debate", texto: `Agora me conta: você concorda com essa visão sobre ${assunto}? Responde aqui. Adoro ler cada mensagem 💬` }
+          ]
+        },
+        venda: {
+          nome: "Venda Suave",
+          stories3: [
+            { numero: 1, tipo: "😰 Dor Real", texto: `Se você ainda tem dificuldade com ${assunto}, eu entendo. Passei por isso também. E sei exatamente o que muda esse cenário. 👇` },
+            { numero: 2, tipo: "💡 Solução", texto: `Depois de muito estudo e prática em ${esp}, desenvolvi uma forma de abordar ${assunto} que realmente funciona. Não é teoria. É o que aplico todo dia. 👇` },
+            { numero: 3, tipo: "🚪 Convite", texto: `Se você quer sair do lugar com ${assunto}, me manda uma mensagem agora. Vamos ver se faz sentido trabalharmos juntos 💜` }
+          ],
+          stories5: [
+            { numero: 1, tipo: "🎬 Abertura Empática", texto: `Deixa eu te contar uma história sobre ${assunto} que aconteceu essa semana. Acho que você vai se identificar 👇` },
+            { numero: 2, tipo: "😰 A Dor do Avatar", texto: `Uma pessoa chegou até mim completamente perdida com ${assunto}. Ela havia tentado de tudo, mas nada funcionava. Reconhece esse sentimento? 👇` },
+            { numero: 3, tipo: "🔄 A Virada", texto: `O que descobrimos juntos é que o problema com ${assunto} não era falta de esforço. Era falta de direção. Uma coisa mudou tudo. 👇` },
+            { numero: 4, tipo: "🏆 O Resultado", texto: `Depois de [tempo], ela [resultado conquistado com ${assunto}]. Não porque fez mais. Porque fez certo. Com o método certo para ${esp}. 👇` },
+            { numero: 5, tipo: "💌 Convite Pessoal", texto: `Se essa história te tocou e você quer esse tipo de resultado com ${assunto}, me manda uma mensagem. Quero te conhecer e entender o que você precisa 💜` }
+          ]
+        },
+        humanizacao: {
+          nome: "Humanização",
+          stories3: [
+            { numero: 1, tipo: "🌅 Bastidores", texto: `Hoje foi um dia que me lembrou por que escolhi trabalhar com ${esp} e ${assunto}. Deixa eu te contar 👇` },
+            { numero: 2, tipo: "❤️ A Conexão Humana", texto: `Por trás de cada caso de ${assunto} tem uma pessoa com uma história. E quando a gente lembra disso, muda completamente a forma de trabalhar. 👇` },
+            { numero: 3, tipo: "🙏 Gratidão", texto: `Obrigada por acompanhar minha jornada com ${assunto} em ${esp}. Cada mensagem que recebo me motiva a continuar trazendo conteúdo de verdade pra vocês 💜` }
+          ],
+          stories5: [
+            { numero: 1, tipo: "🌅 Abertura Pessoal", texto: `Bom dia! Começando o dia pensando em ${assunto} e em tudo que aprendi nessa jornada em ${esp}. Entra aqui 👇` },
+            { numero: 2, tipo: "😅 Vulnerabilidade", texto: `Posso ser honesta? Nem sempre foi fácil trabalhar com ${assunto}. Teve momentos que eu quis desistir. Mas algo me fez continuar 👇` },
+            { numero: 3, tipo: "🔄 A Virada Pessoal", texto: `O que mudou foi [momento ou decisão pessoal sua]. A partir daí, minha relação com ${assunto} em ${esp} virou de ponta cabeça. Para o bem. 👇` },
+            { numero: 4, tipo: "💡 O Aprendizado", texto: `O que aprendi sobre ${assunto} nessa jornada é que [lição de vida profissional]. Isso vale muito mais do que qualquer técnica ou protocolo. 👇` },
+            { numero: 5, tipo: "💜 Conexão com o Seguidor", texto: `Se você também tem uma história com ${assunto}, me conta. Adoro saber que não estamos sozinhos nessa caminhada 🙏` }
+          ]
+        },
+        entretenimento: {
+          nome: "Entretenimento",
+          stories3: [
+            { numero: 1, tipo: "😂 Gancho Divertido", texto: `Coisas que todo profissional de ${esp} já ouviu sobre ${assunto}: [situação engraçada e real]. Reconhece? 👇` },
+            { numero: 2, tipo: "🎭 O Plot Twist", texto: `E sabe o que é mais incrível? A resposta correta sobre ${assunto} é exatamente o contrário do que todo mundo acha. A vida tem dessas 😅 👇` },
+            { numero: 3, tipo: "😂 Encerramento Leve", texto: `Se você se identificou, me manda aqui qual é o mito sobre ${assunto} que você mais ouviu. Vou rir (e chorar) junto com você 😂💬` }
+          ],
+          stories5: [
+            { numero: 1, tipo: "🎬 Cena Cômica", texto: `Recriando aquela conversa clássica sobre ${assunto} que todo profissional de ${esp} já teve na vida... Fica aqui 😂 👇` },
+            { numero: 2, tipo: "😤 O Personagem", texto: `Você: [situação séria sobre ${assunto}]. A internet: [resposta absurda que as pessoas dão]. Eu: 🙃 👇` },
+            { numero: 3, tipo: "🧠 A Virada Educativa", texto: `Brincadeiras à parte, sobre ${assunto} o que realmente importa é [informação de valor]. Porque no final, a gente quer resultado mesmo. 👇` },
+            { numero: 4, tipo: "💡 O Insight Leve", texto: `E a lição que fica sobre ${assunto} em ${esp} é: [lição de forma descontraída]. Simples assim. Difícil de aplicar? Talvez. Impossível? Jamais. 👇` },
+            { numero: 5, tipo: "🎉 CTA Divertido", texto: `Agora me conta: qual é a maior loucura que você já ouviu sobre ${assunto}? Me manda aqui que quero montar um compilado 😂💬` }
+          ]
+        }
+      };
+
+      const seq = sequencias[tema] || sequencias.autoridade;
+      const resultado = tipo === "3" ? seq.stories3 : seq.stories5;
+
+      setGpsGerador(prev => ({
+        ...prev,
+        loading: false,
+        resultado,
+        nomeTema: seq.nome
+      }));
+    }, 1200);
+  };
+  const [expandedRoteiro, setExpandedRoteiro] = useState(null);
+
+  const gerarRoteiroInfinito = () => {
+    if (!roteiroInfinito.assunto.trim()) return;
+    setRoteiroInfinito(prev => ({ ...prev, loading: true, resultado: null }));
+
+    setTimeout(() => {
+      const assunto = roteiroInfinito.assunto.trim();
+      const assuntoCapital = assunto.charAt(0).toUpperCase() + assunto.slice(1);
+      const esp = especialidadeAtiva?.label || "saúde";
+
+      // Templates específicos por tipo de especialidade
+      const isSaude = ["Psicologia","Odontologia","Medicina","Estética","Nutrição","Fisioterapia","Harmonização Facial"].includes(esp);
+      const isMarketing = ["Social Media"].includes(esp);
+      const isJuridico = ["Advocacia"].includes(esp);
+      const isFitness = ["Educação Física"].includes(esp);
+
+      const conjuntos = [
+        {
+          titulo: `${assuntoCapital}: o que você precisa saber`,
+          gancho: `Você sabia que a maioria das pessoas erra em ${assunto}? Veja o porquê.`,
+          desenvolvimento: isSaude
+            ? `Quando o assunto é ${assunto}, existe uma enorme diferença entre o que se faz por hábito e o que a evidência científica recomenda. Na prática clínica, vejo diariamente pacientes que chegam com crenças equivocadas sobre ${assunto}. O primeiro passo é entender que cada caso é único. O segundo é ter um protocolo baseado em dados reais, não em achismos. Comece revisando sua abordagem hoje.`
+            : isMarketing
+            ? `No Instagram, ${assunto} é um dos temas que mais geram engajamento quando bem trabalhados. A diferença entre um post que viraliza e um que passa despercebido está no gancho, na profundidade do conteúdo e no CTA. Pare de criar conteúdo genérico sobre ${assunto} e comece a trazer sua perspectiva única como profissional. É isso que constrói autoridade.`
+            : isJuridico
+            ? `No direito, ${assunto} é um tema que gera muita dúvida no público. A maioria das pessoas não sabe quais são seus direitos quando se trata de ${assunto}. Informar sobre isso de forma clara e acessível é exatamente o que posiciona um advogado como referência. Conteúdo educativo sobre ${assunto} atrai clientes que já chegam confiando em você.`
+            : `Quando falamos de ${assunto} na área de ${esp}, o que separa resultados mediocres de resultados excepcionais são detalhes que a maioria ignora. Consistência, técnica correta e progressão inteligente fazem toda a diferença. Quem domina ${assunto} domina os resultados dos seus alunos.`,
+          cta: `Você já aplica isso com ${assunto}? Me conta nos comentários.`
+        },
+        {
+          titulo: `Por que ${assunto} está te travando`,
+          gancho: `Se você tem dificuldade com ${assunto}, esse vídeo é pra você.`,
+          desenvolvimento: isSaude
+            ? `${assuntoCapital} é uma das principais queixas que recebo. E o problema quase nunca é o que as pessoas pensam. Na maioria dos casos, a raiz está em hábitos antigos, informações erradas ou falta de acompanhamento profissional adequado. A boa notícia: quando você entende o que está por trás de ${assunto}, a solução se torna muito mais simples e eficaz.`
+            : isMarketing
+            ? `Muitos criadores de conteúdo travam em ${assunto} porque tentam copiar o que funciona para outros sem adaptar para a própria voz e nicho. ${assuntoCapital} precisa ser tratado com estratégia, não com sorte. Define o objetivo do conteúdo, conhece profundamente quem vai assistir e entrega valor real. Isso é o que transforma visualização em seguidor fiel.`
+            : isJuridico
+            ? `A maioria das pessoas só procura um advogado quando o problema com ${assunto} já virou uma crise. Mas a prevenção é sempre mais barata e menos estressante. Entender seus direitos sobre ${assunto} antes de precisar é o que te coloca em posição de vantagem em qualquer situação.`
+            : `A maior parte das pessoas que trava em ${assunto} está cometendo um erro básico: pulando etapas. ${assuntoCapital} exige progressão, recuperação e consistência. Sem esses três pilares, os resultados nunca vêm — e a frustração aumenta.`,
+          cta: `Salve este vídeo para revisitar quando precisar de clareza sobre ${assunto}.`
+        },
+        {
+          titulo: `${assuntoCapital}: 3 coisas que ninguém te fala`,
+          gancho: `Sobre ${assunto}, existem 3 verdades que poucos profissionais têm coragem de falar.`,
+          desenvolvimento: isSaude
+            ? `Primeiro: ${assunto} não tem solução milagrosa. Qualquer promessa de resultado rápido sem base científica é sinal de alerta. Segundo: o acompanhamento profissional faz diferença real — não é gasto, é investimento. Terceiro: a consistência no longo prazo supera qualquer intervenção isolada. Pacientes que entendem isso chegam com expectativas saudáveis e saem com resultados reais.`
+            : isMarketing
+            ? `Primeiro: ${assunto} não funciona da mesma forma para todos os nichos. O que viraliza para um médico pode não funcionar para um nutricionista. Segundo: consistência bate viralização. Um post bom por semana supera dez posts mediocres. Terceiro: o algoritmo favorece quem gera conversa, não quem apenas publica. Perguntas, respostas e debates são o combustível do alcance orgânico.`
+            : isJuridico
+            ? `Primeiro: seus direitos sobre ${assunto} existem independentemente de você conhecê-los. Segundo: o prazo para agir em casos de ${assunto} é mais curto do que você imagina. Terceiro: esperar para "ver se resolve sozinho" quase sempre piora a situação jurídica. Informação preventiva sobre ${assunto} vale muito mais do que remediar depois.`
+            : `Primeiro: ${assunto} exige técnica antes de carga. Segundo: descanso é parte do treino, não ausência dele. Terceiro: o que funciona no longo prazo é o que você consegue manter com consistência. Essas três verdades sobre ${assunto} mudam completamente a forma de treinar e de orientar alunos.`,
+          cta: `Siga meu perfil para mais conteúdos honestos sobre ${esp}.`
+        }
+      ];
+
+      const r = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      const conjunto = r(conjuntos);
+
+      setRoteiroInfinito(prev => ({
+        ...prev,
+        loading: false,
+        resultado: conjunto
+      }));
+    }, 1500);
+  };
+
+  const copiarTexto = (texto, id) => {
+    navigator.clipboard.writeText(texto);
+    setRoteiroCopied(id);
+    setTimeout(() => setRoteiroCopied(null), 2000);
+  };
+
+  const formatarRoteiroTexto = (r) =>
+    `📌 TÍTULO: ${r.titulo}\n\n🎯 GANCHO (0-3s): ${r.gancho}\n\n📖 DESENVOLVIMENTO (15-30s): ${r.desenvolvimento}\n\n✅ CTA (3-5s): ${r.cta}`;
+
+  if (!aceiteTermos && showPopup) {
+    return (
+      <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0f0c29, #302b63, #24243e)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", fontFamily: "'Segoe UI', sans-serif" }}>
+        <div style={{ background: "rgba(255,255,255,0.05)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "20px", padding: "40px", maxWidth: "480px", width: "100%", color: "#fff" }}>
+          <div style={{ textAlign: "center", marginBottom: "28px" }}>
+            <div style={{ fontSize: "48px", marginBottom: "12px" }}>📋</div>
+            <h2 style={{ fontSize: "22px", fontWeight: "700", margin: "0 0 8px", background: "linear-gradient(90deg, #a78bfa, #f472b6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Roteiros Prontos</h2>
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", margin: 0 }}>por Aline Paula | @alinesapaula</p>
+          </div>
+          <div style={{ background: "rgba(255,255,255,0.05)", borderRadius: "14px", padding: "20px", marginBottom: "24px", fontSize: "14px", lineHeight: "1.7", color: "rgba(255,255,255,0.85)" }}>
+            <p style={{ margin: "0 0 12px" }}>Esses roteiros foram pensados para transformar seu conhecimento em conteúdo que atrai pacientes de verdade.</p>
+            <p style={{ margin: "0 0 12px" }}>Mas lembre: <strong>você é o especialista</strong>. Revise cada roteiro antes de publicar e valide com as diretrizes do seu conselho profissional (CFM, CRO, CRP, CFN, CREF, OAB, ANVISA, CREFITO, CFM/CRO).</p>
+            <div style={{ background: "rgba(167,139,250,0.1)", border: "1px solid rgba(167,139,250,0.3)", borderRadius: "10px", padding: "12px", fontSize: "12px", color: "rgba(255,255,255,0.7)" }}>
+              <strong style={{ color: "#a78bfa" }}>Aviso legal:</strong> Ao clicar em "Li e aceito os termos", você declara que está ciente de que este material é um ponto de partida estratégico, não um conteúdo finalizado. A validação ética e técnica é de sua exclusiva responsabilidade. A criadora deste material — Aline Paula — não se responsabiliza por uso sem a devida revisão profissional.
+            </div>
+          </div>
+          <button onClick={() => setAceiteTermos(true)} style={{ width: "100%", padding: "16px", background: "linear-gradient(135deg, #7c3aed, #db2777)", border: "none", borderRadius: "12px", color: "#fff", fontSize: "16px", fontWeight: "700", cursor: "pointer", letterSpacing: "0.5px" }}>
+            ✅ Li e aceito os termos
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!especialidadeAtiva) {
+    return (
+      <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0f0c29, #302b63, #24243e)", padding: "40px 20px", fontFamily: "'Segoe UI', sans-serif" }}>
+        <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "40px" }}>
+            <h1 style={{ fontSize: "28px", fontWeight: "800", color: "#fff", margin: "0 0 8px" }}>
+              <span style={{ background: "linear-gradient(90deg, #a78bfa, #f472b6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Roteiros Prontos</span>
+            </h1>
+            <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "14px", margin: 0 }}>Selecione sua especialidade para começar</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+            {ESPECIALIDADES.map(esp => (
+              <button key={esp.id} onClick={() => setEspecialidadeAtiva(esp)} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "16px", padding: "20px", cursor: "pointer", textAlign: "left", transition: "all 0.2s", color: "#fff" }}
+                onMouseEnter={e => { e.currentTarget.style.background = "rgba(167,139,250,0.15)"; e.currentTarget.style.borderColor = "rgba(167,139,250,0.5)"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; }}>
+                <div style={{ fontSize: "32px", marginBottom: "8px" }}>{esp.emoji}</div>
+                <div style={{ fontSize: "14px", fontWeight: "600", marginBottom: "4px" }}>{esp.label}</div>
+                {esp.conselho && <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", background: "rgba(167,139,250,0.1)", borderRadius: "6px", padding: "2px 6px", display: "inline-block" }}>{esp.conselho}</div>}
+              </button>
+            ))}
+          </div>
+          <p style={{ textAlign: "center", color: "rgba(255,255,255,0.3)", fontSize: "12px", marginTop: "32px" }}>© Aline Paula | @alinesapaula</p>
+        </div>
+      </div>
+    );
+  }
+
+  const roteiros = ROTEIROS[especialidadeAtiva.id] || [];
+
+  return (
+    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0f0c29, #302b63, #24243e)", fontFamily: "'Segoe UI', sans-serif", color: "#fff" }}>
+      {/* Header */}
+      <div style={{ background: "rgba(0,0,0,0.3)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.1)", padding: "16px 20px", position: "sticky", top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: "700px", margin: "0 auto", display: "flex", alignItems: "center", gap: "12px" }}>
+          <button onClick={() => setEspecialidadeAtiva(null)} style={{ background: "rgba(255,255,255,0.1)", border: "none", borderRadius: "8px", padding: "8px 12px", color: "#fff", cursor: "pointer", fontSize: "12px" }}>← Voltar</button>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: "700", fontSize: "16px" }}>{especialidadeAtiva.emoji} {especialidadeAtiva.label}</div>
+            {especialidadeAtiva.conselho && <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.5)" }}>Validado: {especialidadeAtiva.conselho}</div>}
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ maxWidth: "700px", margin: "0 auto", padding: "20px 20px 0" }}>
+        <div style={{ display: "flex", gap: "8px", background: "rgba(255,255,255,0.05)", borderRadius: "12px", padding: "4px" }}>
+          {[{ id: "roteiros", label: "📝 20 Roteiros" }, { id: "infinito", label: "♾️ Roteiro Infinito" }, { id: "gps", label: "🗺️ GPS dos Stories" }].map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)} style={{ flex: 1, padding: "10px 8px", border: "none", borderRadius: "9px", cursor: "pointer", fontSize: "12px", fontWeight: "600", transition: "all 0.2s", background: tab === t.id ? "linear-gradient(135deg, #7c3aed, #db2777)" : "transparent", color: tab === t.id ? "#fff" : "rgba(255,255,255,0.6)" }}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ maxWidth: "700px", margin: "0 auto", padding: "20px" }}>
+
+        {/* ABA: ROTEIROS PRONTOS */}
+        {tab === "roteiros" && (
+          <div>
+            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px", marginBottom: "20px" }}>20 roteiros validados para {especialidadeAtiva.label}. Clique para expandir e copiar.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {roteiros.map((r, i) => (
+                <div key={i} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "14px", overflow: "hidden", transition: "all 0.2s" }}>
+                  <button onClick={() => setExpandedRoteiro(expandedRoteiro === i ? null : i)} style={{ width: "100%", padding: "16px", background: "transparent", border: "none", cursor: "pointer", textAlign: "left", display: "flex", alignItems: "center", gap: "12px", color: "#fff" }}>
+                    <div style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)", borderRadius: "8px", width: "28px", height: "28px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: "700", flexShrink: 0 }}>{i + 1}</div>
+                    <div style={{ flex: 1, fontSize: "13px", fontWeight: "600", lineHeight: "1.4" }}>{r.titulo}</div>
+                    <div style={{ fontSize: "16px", color: "rgba(255,255,255,0.4)" }}>{expandedRoteiro === i ? "▲" : "▼"}</div>
+                  </button>
+                  {expandedRoteiro === i && (
+                    <div style={{ padding: "0 16px 16px" }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                        {[
+                          { label: "🎯 GANCHO (0-3s)", texto: r.gancho, cor: "#f472b6" },
+                          { label: "📖 DESENVOLVIMENTO (15-30s)", texto: r.desenvolvimento, cor: "#a78bfa" },
+                          { label: "✅ CTA (3-5s)", texto: r.cta, cor: "#34d399" },
+                        ].map((sec, j) => (
+                          <div key={j} style={{ background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "12px" }}>
+                            <div style={{ fontSize: "10px", fontWeight: "700", color: sec.cor, marginBottom: "6px", letterSpacing: "0.5px" }}>{sec.label}</div>
+                            <p style={{ margin: 0, fontSize: "13px", lineHeight: "1.6", color: "rgba(255,255,255,0.85)" }}>{sec.texto}</p>
+                          </div>
+                        ))}
+                        <button onClick={() => copiarTexto(formatarRoteiroTexto(r), i)} style={{ padding: "12px", background: roteiroCopied === i ? "rgba(52,211,153,0.2)" : "linear-gradient(135deg, #7c3aed, #db2777)", border: roteiroCopied === i ? "1px solid #34d399" : "none", borderRadius: "10px", color: roteiroCopied === i ? "#34d399" : "#fff", cursor: "pointer", fontSize: "13px", fontWeight: "600", transition: "all 0.3s" }}>
+                          {roteiroCopied === i ? "✅ Copiado!" : "📋 Copiar roteiro completo"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ABA: ROTEIRO INFINITO */}
+        {tab === "infinito" && (
+          <div>
+            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px", marginBottom: "20px" }}>Digite qualquer assunto e o app gera um roteiro completo na hora.</p>
+            <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px", padding: "20px", marginBottom: "20px" }}>
+              <label style={{ display: "block", fontSize: "12px", color: "rgba(255,255,255,0.6)", marginBottom: "8px", fontWeight: "600" }}>ASSUNTO DO ROTEIRO</label>
+              <textarea value={roteiroInfinito.assunto} onChange={e => setRoteiroInfinito(prev => ({ ...prev, assunto: e.target.value }))} placeholder={`Ex: ansiedade em ${especialidadeAtiva.label.toLowerCase()}, prevenção de doenças, dicas práticas...`} style={{ width: "100%", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", padding: "12px", color: "#fff", fontSize: "14px", minHeight: "80px", resize: "vertical", boxSizing: "border-box", outline: "none", fontFamily: "inherit" }} />
+              <button onClick={gerarRoteiroInfinito} disabled={roteiroInfinito.loading || !roteiroInfinito.assunto.trim()} style={{ marginTop: "12px", width: "100%", padding: "14px", background: roteiroInfinito.loading ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #7c3aed, #db2777)", border: "none", borderRadius: "10px", color: "#fff", fontSize: "14px", fontWeight: "700", cursor: roteiroInfinito.loading ? "not-allowed" : "pointer" }}>
+                {roteiroInfinito.loading ? "⏳ Gerando roteiro..." : "✨ Gerar Roteiro Agora"}
+              </button>
+            </div>
+            {roteiroInfinito.resultado && (
+              <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(167,139,250,0.3)", borderRadius: "16px", padding: "20px" }}>
+                <h3 style={{ margin: "0 0 16px", fontSize: "15px", fontWeight: "700", color: "#a78bfa" }}>📌 {roteiroInfinito.resultado.titulo}</h3>
+                {[
+                  { label: "🎯 GANCHO (0-3s)", texto: roteiroInfinito.resultado.gancho, cor: "#f472b6" },
+                  { label: "📖 DESENVOLVIMENTO (15-30s)", texto: roteiroInfinito.resultado.desenvolvimento, cor: "#a78bfa" },
+                  { label: "✅ CTA (3-5s)", texto: roteiroInfinito.resultado.cta, cor: "#34d399" },
+                ].map((sec, j) => (
+                  <div key={j} style={{ background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "12px", marginBottom: "10px" }}>
+                    <div style={{ fontSize: "10px", fontWeight: "700", color: sec.cor, marginBottom: "6px" }}>{sec.label}</div>
+                    <p style={{ margin: 0, fontSize: "13px", lineHeight: "1.6", color: "rgba(255,255,255,0.85)" }}>{sec.texto}</p>
+                  </div>
+                ))}
+                <button onClick={() => copiarTexto(formatarRoteiroTexto(roteiroInfinito.resultado), "inf")} style={{ width: "100%", padding: "12px", background: roteiroCopied === "inf" ? "rgba(52,211,153,0.2)" : "linear-gradient(135deg, #7c3aed, #db2777)", border: roteiroCopied === "inf" ? "1px solid #34d399" : "none", borderRadius: "10px", color: roteiroCopied === "inf" ? "#34d399" : "#fff", cursor: "pointer", fontSize: "13px", fontWeight: "600" }}>
+                  {roteiroCopied === "inf" ? "✅ Copiado!" : "📋 Copiar roteiro completo"}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ABA: GPS DOS STORIES */}
+        {tab === "gps" && (
+          <div>
+            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px", marginBottom: "20px" }}>Gere uma sequência personalizada ou use os modelos prontos.</p>
+
+            {/* GERADOR DE GPS */}
+            <div style={{ background: "rgba(167,139,250,0.08)", border: "1px solid rgba(167,139,250,0.3)", borderRadius: "16px", padding: "20px", marginBottom: "24px" }}>
+              <h3 style={{ margin: "0 0 12px", fontSize: "14px", fontWeight: "700", color: "#a78bfa" }}>✨ GPS Personalizado — Digite o assunto</h3>
+              <textarea value={gpsGerador.assunto} onChange={e => setGpsGerador(prev => ({ ...prev, assunto: e.target.value }))} placeholder={`Ex: prevenção de cárie, ansiedade, emagrecimento...`} style={{ width: "100%", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", padding: "12px", color: "#fff", fontSize: "14px", minHeight: "60px", resize: "vertical", boxSizing: "border-box", outline: "none", fontFamily: "inherit" }} />
+              <div style={{ display: "flex", gap: "8px", margin: "12px 0" }}>
+                <button onClick={() => setGpsGerador(prev => ({ ...prev, tipo: "3" }))} style={{ flex: 1, padding: "8px", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "700", fontSize: "12px", background: gpsGerador.tipo === "3" ? "linear-gradient(135deg, #7c3aed, #db2777)" : "rgba(255,255,255,0.08)", color: "#fff" }}>3 Stories</button>
+                <button onClick={() => setGpsGerador(prev => ({ ...prev, tipo: "5" }))} style={{ flex: 1, padding: "8px", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "700", fontSize: "12px", background: gpsGerador.tipo === "5" ? "linear-gradient(135deg, #7c3aed, #db2777)" : "rgba(255,255,255,0.08)", color: "#fff" }}>5 Stories</button>
+              </div>
+              <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.5)", margin: "0 0 8px", fontWeight: "600" }}>OBJETIVO DA SEQUÊNCIA:</p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px", marginBottom: "12px" }}>
+                {[
+                  { id: "autoridade", label: "🏆 Autoridade" },
+                  { id: "engajamento", label: "🔥 Engajamento" },
+                  { id: "venda", label: "💰 Venda Suave" },
+                  { id: "humanizacao", label: "❤️ Humanização" },
+                  { id: "entretenimento", label: "😂 Entretenimento" },
+                ].map(t => (
+                  <button key={t.id} onClick={() => setGpsGerador(prev => ({ ...prev, tema: t.id }))} style={{ padding: "8px", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "600", fontSize: "11px", background: gpsGerador.tema === t.id ? "linear-gradient(135deg, #7c3aed, #db2777)" : "rgba(255,255,255,0.06)", color: gpsGerador.tema === t.id ? "#fff" : "rgba(255,255,255,0.6)", textAlign: "center" }}>{t.label}</button>
+                ))}
+              </div>
+              <button onClick={gerarGPS} disabled={gpsGerador.loading || !gpsGerador.assunto.trim()} style={{ width: "100%", padding: "12px", background: gpsGerador.loading ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #7c3aed, #db2777)", border: "none", borderRadius: "10px", color: "#fff", fontSize: "13px", fontWeight: "700", cursor: gpsGerador.loading ? "not-allowed" : "pointer" }}>
+                {gpsGerador.loading ? "⏳ Gerando sequência..." : "🗺️ Gerar GPS Agora"}
+              </button>
+              {gpsGerador.resultado && (
+                <div style={{ marginTop: "16px" }}>
+                  {gpsGerador.resultado.map((s, j) => (
+                    <div key={j} style={{ display: "flex", gap: "12px", marginBottom: "12px" }}>
+                      <div style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)", borderRadius: "50%", width: "28px", height: "28px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: "700", flexShrink: 0 }}>{s.numero}</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: "10px", color: "#f472b6", fontWeight: "700", marginBottom: "4px" }}>{s.tipo}</div>
+                        <p style={{ margin: 0, fontSize: "13px", lineHeight: "1.6", color: "rgba(255,255,255,0.85)", background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "10px" }}>{s.texto}</p>
+                      </div>
+                    </div>
+                  ))}
+                  <button onClick={() => copiarTexto(gpsGerador.resultado.map(s => `Story ${s.numero} — ${s.tipo}:\n${s.texto}`).join("\n\n"), "gps-gerador")} style={{ width: "100%", padding: "11px", background: roteiroCopied === "gps-gerador" ? "rgba(52,211,153,0.2)" : "rgba(167,139,250,0.15)", border: `1px solid ${roteiroCopied === "gps-gerador" ? "#34d399" : "rgba(167,139,250,0.4)"}`, borderRadius: "10px", color: roteiroCopied === "gps-gerador" ? "#34d399" : "#a78bfa", cursor: "pointer", fontSize: "13px", fontWeight: "600" }}>
+                    {roteiroCopied === "gps-gerador" ? "✅ Copiado!" : "📋 Copiar sequência"}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* MODELOS PRONTOS */}
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", marginBottom: "12px", fontWeight: "600" }}>OU USE OS MODELOS PRONTOS:</p>
+            <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
+              <button onClick={() => setGpsConfig(prev => ({ ...prev, tipo: "3" }))} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "10px", cursor: "pointer", fontWeight: "700", fontSize: "13px", background: gpsConfig.tipo === "3" ? "linear-gradient(135deg, #7c3aed, #db2777)" : "rgba(255,255,255,0.08)", color: "#fff" }}>3 Stories</button>
+              <button onClick={() => setGpsConfig(prev => ({ ...prev, tipo: "5" }))} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "10px", cursor: "pointer", fontWeight: "700", fontSize: "13px", background: gpsConfig.tipo === "5" ? "linear-gradient(135deg, #7c3aed, #db2777)" : "rgba(255,255,255,0.08)", color: "#fff" }}>5 Stories</button>
+            </div>
+            {(gpsConfig.tipo === "3" ? GPS_STORIES.sequencias3 : GPS_STORIES.sequencias5).map((seq, si) => (
+              <div key={si} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px", padding: "20px", marginBottom: "16px" }}>
+                <h3 style={{ margin: "0 0 16px", fontSize: "14px", fontWeight: "700", color: "#a78bfa" }}>🗺️ {seq.tema}</h3>
+                {seq.stories.map((s, j) => (
+                  <div key={j} style={{ display: "flex", gap: "12px", marginBottom: "12px" }}>
+                    <div style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)", borderRadius: "50%", width: "28px", height: "28px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: "700", flexShrink: 0 }}>{s.numero}</div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: "10px", color: "#f472b6", fontWeight: "700", marginBottom: "4px" }}>{s.tipo}</div>
+                      <p style={{ margin: 0, fontSize: "13px", lineHeight: "1.6", color: "rgba(255,255,255,0.85)", background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "10px" }}>{s.texto}</p>
+                    </div>
+                  </div>
+                ))}
+                <button onClick={() => copiarTexto(seq.stories.map(s => `Story ${s.numero} — ${s.tipo}:\n${s.texto}`).join("\n\n"), `gps-${si}`)} style={{ width: "100%", padding: "11px", background: roteiroCopied === `gps-${si}` ? "rgba(52,211,153,0.2)" : "rgba(167,139,250,0.15)", border: `1px solid ${roteiroCopied === `gps-${si}` ? "#34d399" : "rgba(167,139,250,0.4)"}`, borderRadius: "10px", color: roteiroCopied === `gps-${si}` ? "#34d399" : "#a78bfa", cursor: "pointer", fontSize: "13px", fontWeight: "600" }}>
+                  {roteiroCopied === `gps-${si}` ? "✅ Copiado!" : "📋 Copiar sequência"}
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <p style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", fontSize: "11px", marginTop: "32px" }}>© Aline Paula | @alinesapaula</p>
+      </div>
+    </div>
+  );
+}
+
+const { useState } = React;
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
